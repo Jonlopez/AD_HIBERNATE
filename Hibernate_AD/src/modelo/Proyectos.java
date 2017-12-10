@@ -16,6 +16,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -23,8 +25,12 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "proyectos")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Proyectos.findAll", query = "SELECT p FROM Proyectos p")})
+    @NamedQuery(name = "Proyectos.findAll", query = "SELECT p FROM Proyectos p"),
+    @NamedQuery(name = "Proyectos.findByCodigo", query = "SELECT p FROM Proyectos p WHERE p.codigo = :codigo"),
+    @NamedQuery(name = "Proyectos.findByNombre", query = "SELECT p FROM Proyectos p WHERE p.nombre = :nombre"),
+    @NamedQuery(name = "Proyectos.findByCiudad", query = "SELECT p FROM Proyectos p WHERE p.ciudad = :ciudad")})
 public class Proyectos implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -77,6 +83,7 @@ public class Proyectos implements Serializable {
         this.ciudad = ciudad;
     }
 
+    @XmlTransient
     public List<Gestion> getGestionList() {
         return gestionList;
     }

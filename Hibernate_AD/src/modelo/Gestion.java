@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -22,8 +23,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "gestion")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Gestion.findAll", query = "SELECT g FROM Gestion g")})
+    @NamedQuery(name = "Gestion.findAll", query = "SELECT g FROM Gestion g"),
+    @NamedQuery(name = "Gestion.findByCodproveedor", query = "SELECT g FROM Gestion g WHERE g.gestionPK.codproveedor = :codproveedor"),
+    @NamedQuery(name = "Gestion.findByCodpieza", query = "SELECT g FROM Gestion g WHERE g.gestionPK.codpieza = :codpieza"),
+    @NamedQuery(name = "Gestion.findByCodproyecto", query = "SELECT g FROM Gestion g WHERE g.gestionPK.codproyecto = :codproyecto"),
+    @NamedQuery(name = "Gestion.findByCantidad", query = "SELECT g FROM Gestion g WHERE g.cantidad = :cantidad")})
 public class Gestion implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId

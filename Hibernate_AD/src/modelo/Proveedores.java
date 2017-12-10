@@ -16,6 +16,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -23,8 +25,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "proveedores")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Proveedores.findAll", query = "SELECT p FROM Proveedores p")})
+    @NamedQuery(name = "Proveedores.findAll", query = "SELECT p FROM Proveedores p"),
+    @NamedQuery(name = "Proveedores.findByCodigo", query = "SELECT p FROM Proveedores p WHERE p.codigo = :codigo"),
+    @NamedQuery(name = "Proveedores.findByNombre", query = "SELECT p FROM Proveedores p WHERE p.nombre = :nombre"),
+    @NamedQuery(name = "Proveedores.findByApellidos", query = "SELECT p FROM Proveedores p WHERE p.apellidos = :apellidos"),
+    @NamedQuery(name = "Proveedores.findByDireccion", query = "SELECT p FROM Proveedores p WHERE p.direccion = :direccion")})
 public class Proveedores implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -89,6 +96,7 @@ public class Proveedores implements Serializable {
         this.direccion = direccion;
     }
 
+    @XmlTransient
     public List<Gestion> getGestionList() {
         return gestionList;
     }

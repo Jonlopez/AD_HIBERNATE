@@ -5,6 +5,7 @@
  */
 package controlador;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -12,15 +13,18 @@ import javax.persistence.Persistence;
  *
  * @author Jon
  */
-public final class EntityMan {
+public class EntityMan {
+    private static final EntityManagerFactory emf;
     
-    private static EntityManagerFactory enf= Persistence.createEntityManagerFactory("Hibernate_ADPU");
-
-    public EntityMan() {
+    static {
+        emf = Persistence.createEntityManagerFactory("Hibernate_ADPU");
     }
     
-    public static EntityManagerFactory getInstance(){
-        return enf;
+    public static EntityManager getEntityManager() {
+        return emf.createEntityManager();
     }
     
+    public static void close(){
+        emf.close();
+    }
 }
