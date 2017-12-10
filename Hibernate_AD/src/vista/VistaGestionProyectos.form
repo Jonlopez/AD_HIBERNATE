@@ -38,9 +38,6 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
-      <Events>
-        <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="jTabbedPane1AncestorAdded"/>
-      </Events>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
@@ -598,9 +595,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jT_prov_filtro">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jT_prov_filtroActionPerformed"/>
-                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
                       <AuxValues>
@@ -1158,9 +1152,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextField25">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField25ActionPerformed"/>
-                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
                       <AuxValues>
@@ -1675,9 +1666,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextField29">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField29ActionPerformed"/>
-                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane3">
                       <AuxValues>

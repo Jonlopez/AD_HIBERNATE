@@ -6,6 +6,7 @@
 package vista;
 
 import controlador.ProveedoresJpaController;
+import hibernate_ad.Hibernate_AD;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,13 +28,80 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         initComponents();
     }
     
-    private DefaultTableModel dtm_prov;    
+    /**
+     * Variables globales para control de proveedores
+     */
+    private DefaultTableModel dtm_prov; //Modelo de la tabla de proveedores
+    private List<Proveedores>arr_proveedores = null; //Proveedores
+    private int nav_prov = 0; //Indice de (arr_proveedores), para saber con que proveedor vamos a trabajar
+    private Proveedores mod_prov = null; //Proveedor encontrado a la hora de insertar uno nuevo, posibilidad de modificarlo o eliminarlo
     
-    public VistaGestionProyectos(Boolean algo) {
+    public VistaGestionProyectos(List<Proveedores>  arr_proveedores) {
+        
         initComponents();
-        this.setLocationRelativeTo(this);        
+        
+        this.setLocationRelativeTo(this); 
+        
+        this.arr_proveedores = arr_proveedores;
+        
         dtm_prov = (DefaultTableModel)jTable_prov.getModel();
+        
         jTable_prov.setModel(dtm_prov);
+        
+    }
+    
+    private void pintarProveedorListado(Proveedores cur_prov){
+        
+        jT_prov_cod_02.setText(cur_prov.getCodigo());
+        
+        jT_prov_nombre_02.setText(cur_prov.getNombre());
+        
+        jT_prov_apellidos_02.setText(cur_prov.getApellidos());
+        
+        jT_prov_dir_02.setText(cur_prov.getDireccion());
+        
+    }
+    
+    private void pintarProveedorTabla(Proveedores cur_prov){
+        
+        String fila[] = new String [4];
+        
+            fila [0] = (cur_prov.getCodigo());
+
+            fila [1] = (cur_prov.getNombre());
+
+            fila [2] = (cur_prov.getApellidos());
+
+            fila [3] = (cur_prov.getDireccion()); 
+        
+        dtm_prov.addRow(fila);
+        
+    }
+    
+    private void limpiarProveedor(){
+        
+        jT_prov_cod_01.setText("");
+        
+        jT_prov_nombre_01.setText("");
+        
+        jT_prov_apellidos_01.setText("");
+        
+        jT_prov_dir_01.setText("");
+        
+    }
+    
+    private Proveedores rellenarProveedor(){
+        
+        String codigo = jT_prov_cod_01.getText();
+        
+        String nombre = jT_prov_nombre_01.getText();
+        
+        String apellidos = jT_prov_apellidos_01.getText();
+        
+        String direccion = jT_prov_dir_01.getText();    
+        
+        return new Proveedores(codigo, nombre, apellidos, direccion);  
+        
     }
 
     /**
@@ -178,16 +246,6 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gestión de Proyectos");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        jTabbedPane1.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                jTabbedPane1AncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/images/fondo.PNG"))); // NOI18N
 
@@ -490,12 +548,6 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         jT_proveedores.addTab("Gestión de proveedores", jTabbedPane2);
 
         jComboBox_prov_filtro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Por código", "Por nombre", "Por dirección" }));
-
-        jT_prov_filtro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jT_prov_filtroActionPerformed(evt);
-            }
-        });
 
         jTable_prov.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -811,12 +863,6 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Por código", "Por nombre" }));
 
-        jTextField25.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField25ActionPerformed(evt);
-            }
-        });
-
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -1105,12 +1151,6 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Por código", "Por nombre", "Por ciudad" }));
 
-        jTextField29.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField29ActionPerformed(evt);
-            }
-        });
-
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -1193,31 +1233,23 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTabbedPane1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTabbedPane1AncestorAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTabbedPane1AncestorAdded
-
-    private void jT_prov_filtroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jT_prov_filtroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jT_prov_filtroActionPerformed
-
-    private void jTextField25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField25ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField25ActionPerformed
-
-    private void jTextField29ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField29ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField29ActionPerformed
-
     private void jB_prov_insertarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_insertarMouseClicked
         // TODO add your handling code here:    
                   
         try{  
-            Proveedores p = rellenarProveedor();   
-            ProveedoresJpaController c_prov = new ProveedoresJpaController();               
-            c_prov.createUpdate(p);              
-            JOptionPane.showMessageDialog(null, "Datos agregados correctamente");            
-            limpiarProveedor();
+            
+            Proveedores p = rellenarProveedor(); 
+            
+            if(Hibernate_AD.insertOrUpdateProveedor(p)){
+                
+                JOptionPane.showMessageDialog(null, "Datos agregados correctamente");            
+                
+                limpiarProveedor();
+                
+            }else
+                
+                JOptionPane.showMessageDialog(null, "No se ha podido grabar el nuevo proveedor");   
+            
         }
         catch(Exception ex){
             Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
@@ -1225,210 +1257,239 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jB_prov_insertarMouseClicked
-
-    private List<Proveedores>arr_proveedores = null;
     
     private void jB_prov_eject_consultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_eject_consultaMouseClicked
-        // TODO add your handling code here:
-        
-        ProveedoresJpaController c_prov = new ProveedoresJpaController();
+        // TODO add your handling code here:       
          
-        this.arr_proveedores = c_prov.findAll();
+        this.arr_proveedores = Hibernate_AD.findAllProveedores();
          
         if(arr_proveedores != null && arr_proveedores.size() > 0){
+            
             jT_prov_min.setText( "1" );
-            Integer max = arr_proveedores.size();               
+            
+            Integer max = arr_proveedores.size();  
+            
             jT_prov_max.setText( max.toString() );
+            
             pintarProveedorListado(arr_proveedores.get(0));
+            
         }        
         
     }//GEN-LAST:event_jB_prov_eject_consultaMouseClicked
-
-    private int nav_prov = 0;
-    
-    private void pintarProveedorListado(Proveedores cur_prov){
-        jT_prov_cod_02.setText(cur_prov.getCodigo());
-        jT_prov_nombre_02.setText(cur_prov.getNombre());
-        jT_prov_apellidos_02.setText(cur_prov.getApellidos());
-        jT_prov_dir_02.setText(cur_prov.getDireccion());
-    }
-    
-    private void pintarProveedorTabla(Proveedores cur_prov){
-           String fila[] = new String [4];
-            fila [0] = (cur_prov.getCodigo());
-            fila [1] = (cur_prov.getNombre());
-            fila [2] = (cur_prov.getApellidos());
-            fila [3] = (cur_prov.getDireccion()); 
-            dtm_prov.addRow(fila);
-    }
-    
+   
     private void jB_prov_inicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_inicioMouseClicked
         // TODO add your handling code here:    
-        if(arr_proveedores != null && arr_proveedores.size() > 0){           
-            pintarProveedorListado(arr_proveedores.get(0));                           
+        
+        if(arr_proveedores != null && arr_proveedores.size() > 0){   
+            
+            pintarProveedorListado(arr_proveedores.get(0));   
+            
             jT_prov_min.setText( "1" );
+            
             nav_prov = 0;
+            
         }          
+        
     }//GEN-LAST:event_jB_prov_inicioMouseClicked
 
     private void jB_prov_finalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_finalMouseClicked
         // TODO add your handling code here:
-        if(arr_proveedores != null && arr_proveedores.size() > 0){           
+        
+        if(arr_proveedores != null && arr_proveedores.size() > 0){   
+            
             pintarProveedorListado(arr_proveedores.get((arr_proveedores.size() - 1)));
-            Integer min = arr_proveedores.size();               
+            
+            Integer min = arr_proveedores.size();   
+            
             jT_prov_min.setText( min.toString() );
+            
             nav_prov = (arr_proveedores.size() - 1);
+            
         } 
+        
     }//GEN-LAST:event_jB_prov_finalMouseClicked
 
     private void jB_prov_antMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_antMouseClicked
         // TODO add your handling code here:
+        
         if(arr_proveedores != null && arr_proveedores.size() > 0){
             
             if( (nav_prov - 1)>=0){
+                
                 pintarProveedorListado(arr_proveedores.get(nav_prov - 1));
-                Integer min = nav_prov;               
+                
+                Integer min = nav_prov; 
+                
                 jT_prov_min.setText( min.toString() );
+                
                 nav_prov = nav_prov - 1;
+                
             }else{
+                
                 pintarProveedorListado(arr_proveedores.get((arr_proveedores.size() - 1)));
-                Integer min = arr_proveedores.size();               
+                
+                Integer min = arr_proveedores.size();  
+                
                 jT_prov_min.setText( min.toString() );
+                
                 nav_prov = arr_proveedores.size() - 1;
+                
             }
+            
         } 
+        
     }//GEN-LAST:event_jB_prov_antMouseClicked
 
     private void jB_prov_siguiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_siguiMouseClicked
-        // TODO add your handling code here:
+        // TODO add your handling code here:        
+        
         if(arr_proveedores != null && arr_proveedores.size() > 0){
             
-            if( (nav_prov + 1) < arr_proveedores.size() ){                
+            if( (nav_prov + 1) < arr_proveedores.size() ){ 
+                
                 pintarProveedorListado(arr_proveedores.get(nav_prov + 1));
+                
                 nav_prov = nav_prov + 1;
-                Integer min = nav_prov + 1;               
-                jT_prov_min.setText( min.toString() );                
+                
+                Integer min = nav_prov + 1;  
+                
+                jT_prov_min.setText( min.toString() );   
+                
             }else{
-                pintarProveedorListado(arr_proveedores.get(0));                               
+                
+                pintarProveedorListado(arr_proveedores.get(0));  
+                
                 jT_prov_min.setText( "1" );
+                
                 nav_prov = 0;
+                
             }
+            
         } 
+        
     }//GEN-LAST:event_jB_prov_siguiMouseClicked
 
     private void jB_prov_eliminar_02MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_eliminar_02MouseClicked
         // TODO add your handling code here:
+        
         if(arr_proveedores != null && arr_proveedores.size() > 0){
-            ProveedoresJpaController c_prov = new ProveedoresJpaController();
-            c_prov.delete(arr_proveedores.get(nav_prov));
-            JOptionPane.showMessageDialog(this, "Proveedor ( " + arr_proveedores.get(nav_prov).getNombre() + " )  eliminado correcamente.");
-            arr_proveedores.remove(nav_prov);
             
-             if((nav_prov - 1)>=0){
-                pintarProveedorListado(arr_proveedores.get(nav_prov - 1));
-                Integer min = nav_prov;               
-                jT_prov_min.setText( min.toString() );
-                nav_prov = nav_prov - 1;
-            }else{
-                pintarProveedorListado(arr_proveedores.get((arr_proveedores.size() - 1)));
-                Integer min = arr_proveedores.size();               
-                jT_prov_min.setText( min.toString() );
-                nav_prov = arr_proveedores.size() - 1;
-            }
+            if(Hibernate_AD.deleteProveedor(arr_proveedores.get(nav_prov))){
+                
+                JOptionPane.showMessageDialog(this, "Proveedor ( " + arr_proveedores.get(nav_prov).getNombre() + " )  eliminado correcamente.");
+                
+                arr_proveedores.remove(nav_prov);
+                
+                if((nav_prov - 1)>=0){
+                    
+                    pintarProveedorListado(arr_proveedores.get(nav_prov - 1));
+                    
+                    Integer min = nav_prov;   
+                    
+                    jT_prov_min.setText( min.toString() );
+                    
+                    nav_prov = nav_prov - 1;
+                    
+                }else{
+                    
+                    pintarProveedorListado(arr_proveedores.get((arr_proveedores.size() - 1)));
+                    
+                    Integer min = arr_proveedores.size();     
+                    
+                    jT_prov_min.setText( min.toString() );
+                    
+                    nav_prov = arr_proveedores.size() - 1;
+                    
+                }
              
-            Integer max = arr_proveedores.size();               
-            jT_prov_max.setText( max.toString() );
-             
-        }
-          
+                Integer max = arr_proveedores.size();         
+                
+                jT_prov_max.setText( max.toString() );
+                
+            }else
+                
+                JOptionPane.showMessageDialog(this, "Proveedor ( " + arr_proveedores.get(nav_prov).getNombre() + " )  no se ha podido eliminar.");
+                         
+        }         
         
     }//GEN-LAST:event_jB_prov_eliminar_02MouseClicked
 
-    private void limpiarProveedor(){
-        jT_prov_cod_01.setText("");
-        jT_prov_nombre_01.setText("");
-        jT_prov_apellidos_01.setText("");
-        jT_prov_dir_01.setText("");
-    }
+    
     
     private void jB_prov_limpiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_limpiarMouseClicked
         // TODO add your handling code here:
+        
         limpiarProveedor();
+        
     }//GEN-LAST:event_jB_prov_limpiarMouseClicked
 
     private void jB_prov_filtro_ejecutarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_filtro_ejecutarMouseClicked
         // TODO add your handling code here:
         
         try{
+            
             dtm_prov.setNumRows(0); 
-        }catch(Exception e){
             
-        }
+            this.arr_proveedores = Hibernate_AD.findProveedorByFiltro(jComboBox_prov_filtro.getSelectedIndex(), jT_prov_filtro.getText());
         
-        ProveedoresJpaController c_prov = new ProveedoresJpaController();
-        
-        if(jT_prov_filtro.getText().equals("")){            
-         
-            this.arr_proveedores = c_prov.findAll();
-            
-        }else{        
-            switch(jComboBox_prov_filtro.getSelectedIndex()){
-                case 0: //codigo
-                      this.arr_proveedores = c_prov.findByCodigo(jT_prov_filtro.getText());
-                    break;
-                case 1: //nombre
-                      this.arr_proveedores = c_prov.findByNombre(jT_prov_filtro.getText());
-                    break;
-                case 2: //dirección
-                      this.arr_proveedores = c_prov.findByDireccion(jT_prov_filtro.getText());
-                    break;
-            }
-            
-        }
-        
-        if(arr_proveedores != null && arr_proveedores.size() > 0){                
+            if(arr_proveedores != null && arr_proveedores.size() > 0){                
                 
-            for(Proveedores cur_prov : arr_proveedores){
-                pintarProveedorTabla(cur_prov);
-            }
-                
-        }   
+                for(Proveedores cur_prov : arr_proveedores)
+                    
+                    pintarProveedorTabla(cur_prov);
+                            
+            }   
+            
+        }catch(Exception ex){
+            
+            Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }        
+        
+        
         
     }//GEN-LAST:event_jB_prov_filtro_ejecutarMouseClicked
-
-    private Proveedores rellenarProveedor(){
-        String codigo = jT_prov_cod_01.getText();
-        String nombre = jT_prov_nombre_01.getText();
-        String apellidos = jT_prov_apellidos_01.getText();
-        String direccion = jT_prov_dir_01.getText();                       
-        return new Proveedores(codigo, nombre, apellidos, direccion);  
-    }
     
     private void jB_prov_modificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_modificarMouseClicked
         // TODO add your handling code here:
+        
         if(mod_prov != null){            
-            ProveedoresJpaController c_prov = new ProveedoresJpaController();
-            Proveedores p = rellenarProveedor();  
-            c_prov.createUpdate(p);
-            JOptionPane.showMessageDialog(null, "Datos del proveedor (" + p.getCodigo()+ ") modificados correctamente");
-            limpiarProveedor();
+           
+            Proveedores p = rellenarProveedor();             
+            
+            if(Hibernate_AD.insertOrUpdateProveedor(p))            {
+                
+                JOptionPane.showMessageDialog(null, "Datos del proveedor (" + p.getCodigo()+ ") modificados correctamente");
+                
+                limpiarProveedor();
+                
+            }else
+                
+                JOptionPane.showMessageDialog(null, "Los datos del proveedor (" + p.getCodigo()+ ") no se pudieron modifcar");
+                            
         }
         
     }//GEN-LAST:event_jB_prov_modificarMouseClicked
-
-    private Proveedores mod_prov = null;
     
     private void jT_prov_cod_01FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jT_prov_cod_01FocusLost
         // TODO add your handling code here:
-        ProveedoresJpaController c_prov = new ProveedoresJpaController();
-        this.arr_proveedores = c_prov.findByCodigo(jT_prov_cod_01.getText());
-        if(arr_proveedores != null && arr_proveedores.size() > 0){               
+        
+        this.arr_proveedores = Hibernate_AD.findProveedorByFiltro(0, jT_prov_cod_01.getText());
+                
+        if(arr_proveedores != null && arr_proveedores.size() > 0){
+            
             jT_prov_nombre_01.setText(arr_proveedores.get(0).getNombre());
+            
             jT_prov_apellidos_01.setText(arr_proveedores.get(0).getApellidos());
+            
             jT_prov_dir_01.setText(arr_proveedores.get(0).getDireccion());
+            
             mod_prov = arr_proveedores.get(0);
+            
         }else
+            
             mod_prov = null;
+        
     }//GEN-LAST:event_jT_prov_cod_01FocusLost
 
     /**
