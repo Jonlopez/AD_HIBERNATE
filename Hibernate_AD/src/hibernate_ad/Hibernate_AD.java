@@ -5,8 +5,10 @@
  */
 package hibernate_ad;
 
+import com.sun.deploy.uitoolkit.impl.fx.ui.MixedCodeInSwing;
 import controlador.ProveedoresJpaController;
 import java.util.List;
+import javax.swing.JOptionPane;
 import modelo.Proveedores;
 import vista.VistaGestionProyectos;
 
@@ -23,7 +25,16 @@ public class Hibernate_AD {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        lanzarInterface();        
+        try{
+            
+            lanzarInterface();
+            
+        }catch(java.lang.ExceptionInInitializerError ex){
+            
+            JOptionPane.showMessageDialog(null, "No se ha podido conectar a la base de datos");   
+            
+        }
+        
     }
     
     public static void lanzarInterface(){
@@ -34,10 +45,10 @@ public class Hibernate_AD {
         
     }
     
-    public static List<Proveedores> findAllProveedores(){
-        
-        ProveedoresJpaController c_prov = new ProveedoresJpaController();        
-        
+    public static List<Proveedores> findAllProveedores(){  
+            
+        ProveedoresJpaController c_prov = new ProveedoresJpaController();
+
         return c_prov.findAll();
         
     }
@@ -56,15 +67,15 @@ public class Hibernate_AD {
                 
                 case 0:
                     
-                      return c_prov.findByCodigo(filtro);
+                      return c_prov.findByCodigoLike(filtro);
                     
                 case 1:
                     
-                      return c_prov.findByNombre(filtro);
+                      return c_prov.findByNombreLike(filtro);
                     
                 case 2:
                     
-                      return c_prov.findByDireccion(filtro);
+                      return c_prov.findByDireccionLike(filtro);
                     
                 default:
                     

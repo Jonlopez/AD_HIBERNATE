@@ -29,9 +29,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Proveedores.findAll", query = "SELECT p FROM Proveedores p"),
     @NamedQuery(name = "Proveedores.findByCodigo", query = "SELECT p FROM Proveedores p WHERE p.codigo = :codigo"),
+    @NamedQuery(name = "Proveedores.findByCodigoLike", query = "SELECT p FROM Proveedores p WHERE  p.codigo like :codigo"),
     @NamedQuery(name = "Proveedores.findByNombre", query = "SELECT p FROM Proveedores p WHERE p.nombre = :nombre"),
+    @NamedQuery(name = "Proveedores.findByNombreLike", query = "SELECT p FROM Proveedores p WHERE p.nombre like :nombre"),
     @NamedQuery(name = "Proveedores.findByApellidos", query = "SELECT p FROM Proveedores p WHERE p.apellidos = :apellidos"),
-    @NamedQuery(name = "Proveedores.findByDireccion", query = "SELECT p FROM Proveedores p WHERE p.direccion = :direccion")})
+    @NamedQuery(name = "Proveedores.findByDireccion", query = "SELECT p FROM Proveedores p WHERE p.direccion = :direccion"),
+    @NamedQuery(name = "Proveedores.findByDireccionLike", query = "SELECT p FROM Proveedores p WHERE p.direccion like :direccion")
+})
+
 public class Proveedores implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

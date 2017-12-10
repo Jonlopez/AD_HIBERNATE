@@ -19,6 +19,7 @@ import modelo.Proveedores;
 public class ProveedoresJpaController implements Serializable {
 
     public ProveedoresJpaController() {
+        
         this.em = (EntityManager) EntityMan.getEntityManager();
     }
     
@@ -28,14 +29,14 @@ public class ProveedoresJpaController implements Serializable {
         em.getTransaction().begin();
         em.merge(p);
         em.getTransaction().commit();
-//        em.close();
+        em.close();
     }
     
     public void delete(Proveedores p){
         em.getTransaction().begin();
         em.remove(em.merge(p));
         em.getTransaction().commit();
-//        em.close();
+        em.close();
     }    
     
     private List<Proveedores> resultado(Query q){        
@@ -55,15 +56,33 @@ public class ProveedoresJpaController implements Serializable {
         return resultado(q);
     }
     
+     public List<Proveedores> findByCodigoLike(String codigo_l) {
+        Query q = em.createNamedQuery("Proveedores.findByCodigoLike");
+        q.setParameter("codigo", "%" + codigo_l + "%");
+        return resultado(q);
+    }
+    
     public List<Proveedores> findByNombre(String nombre) {
         Query q = em.createNamedQuery("Proveedores.findByNombre");
         q.setParameter("nombre", nombre);        
         return resultado(q);
     }
     
+    public List<Proveedores> findByNombreLike(String nombre_l) {
+        Query q = em.createNamedQuery("Proveedores.findByNombreLike");
+        q.setParameter("nombre", "%" + nombre_l + "%");        
+        return resultado(q);
+    }
+    
     public List<Proveedores> findByDireccion(String dir) {
         Query q = em.createNamedQuery("Proveedores.findByDireccion");
         q.setParameter("direccion", dir);        
+        return resultado(q);
+    }
+    
+    public List<Proveedores> findByDireccionLike(String dir_l) {
+        Query q = em.createNamedQuery("Proveedores.findByDireccionLike");
+        q.setParameter("direccion", "%" + dir_l + "%");        
         return resultado(q);
     }
     
