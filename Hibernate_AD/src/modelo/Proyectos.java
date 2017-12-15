@@ -29,8 +29,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Proyectos.findAll", query = "SELECT p FROM Proyectos p"),
     @NamedQuery(name = "Proyectos.findByCodigo", query = "SELECT p FROM Proyectos p WHERE p.codigo = :codigo"),
+    @NamedQuery(name = "Proyectos.findByCodigoLike", query = "SELECT p FROM Proyectos p WHERE p.codigo like :codigo"),
     @NamedQuery(name = "Proyectos.findByNombre", query = "SELECT p FROM Proyectos p WHERE p.nombre = :nombre"),
-    @NamedQuery(name = "Proyectos.findByCiudad", query = "SELECT p FROM Proyectos p WHERE p.ciudad = :ciudad")})
+    @NamedQuery(name = "Proyectos.findByNombreLike", query = "SELECT p FROM Proyectos p WHERE p.nombre like :nombre"),
+    @NamedQuery(name = "Proyectos.findByCiudad", query = "SELECT p FROM Proyectos p WHERE p.ciudad = :ciudad"),
+    @NamedQuery(name = "Proyectos.findByCiudadLike", query = "SELECT p FROM Proyectos p WHERE p.ciudad like :ciudad")
+})
+
 public class Proyectos implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

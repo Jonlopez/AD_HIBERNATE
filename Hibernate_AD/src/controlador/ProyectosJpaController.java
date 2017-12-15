@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import modelo.Piezas;
 import modelo.Proyectos;
 
 /**
@@ -36,7 +35,7 @@ public class ProyectosJpaController implements Serializable {
         if (proyectos.getGestionList() == null) {
             proyectos.setGestionList(new ArrayList<Gestion>());
         }
-        EntityManager em = null;
+       // EntityManager em = null;
         try {
            // em = getEntityManager();
             em.getTransaction().begin();
@@ -63,14 +62,14 @@ public class ProyectosJpaController implements Serializable {
             }
             throw ex;
         } finally {
-            if (em != null) {
+            if (em.isOpen()) {
                 em.close();
             }
         }
     }
 
     public void edit(Proyectos proyectos) throws IllegalOrphanException, NonexistentEntityException, Exception {
-        EntityManager em = null;
+        //EntityManager em = null;
         try {
             //em = getEntityManager();
             em.getTransaction().begin();
@@ -90,10 +89,13 @@ public class ProyectosJpaController implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             List<Gestion> attachedGestionListNew = new ArrayList<Gestion>();
-            for (Gestion gestionListNewGestionToAttach : gestionListNew) {
-                gestionListNewGestionToAttach = em.getReference(gestionListNewGestionToAttach.getClass(), gestionListNewGestionToAttach.getGestionPK());
-                attachedGestionListNew.add(gestionListNewGestionToAttach);
+            if(gestionListNew != null){
+                for (Gestion gestionListNewGestionToAttach : gestionListNew) {
+                    gestionListNewGestionToAttach = em.getReference(gestionListNewGestionToAttach.getClass(), gestionListNewGestionToAttach.getGestionPK());
+                    attachedGestionListNew.add(gestionListNewGestionToAttach);
+                }    
             }
+            
             gestionListNew = attachedGestionListNew;
             proyectos.setGestionList(gestionListNew);
             proyectos = em.merge(proyectos);
@@ -126,7 +128,7 @@ public class ProyectosJpaController implements Serializable {
     }
 
     public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException {
-        EntityManager em = null;
+        //EntityManager em = null;
         try {
             //em = getEntityManager();
             em.getTransaction().begin();
@@ -210,42 +212,42 @@ public class ProyectosJpaController implements Serializable {
     }
     
     public List<Proyectos> findAll() {
-        Query q = em.createNamedQuery("Piezas.findAll");
+        Query q = em.createNamedQuery("Proyectos.findAll");
         return resultado(q);
     }
     
     public List<Proyectos> findByCodigo(String codigo) {
-        Query q = em.createNamedQuery("Piezas.findByCodigo");
+        Query q = em.createNamedQuery("Proyectos.findByCodigo");
         q.setParameter("codigo", codigo);        
         return resultado(q);
     }
     
      public List<Proyectos> findByCodigoLike(String codigo_l) {
-        Query q = em.createNamedQuery("Piezas.findByCodigoLike");
+        Query q = em.createNamedQuery("Proyectos.findByCodigoLike");
         q.setParameter("codigo", "%" + codigo_l + "%");
         return resultado(q);
     }
     
     public List<Proyectos> findByNombre(String nombre) {
-        Query q = em.createNamedQuery("Piezas.findByNombre");
+        Query q = em.createNamedQuery("Proyectos.findByNombre");
         q.setParameter("nombre", nombre);        
         return resultado(q);
     }
     
     public List<Proyectos> findByNombreLike(String nombre_l) {
-        Query q = em.createNamedQuery("Piezas.findByNombreLike");
+        Query q = em.createNamedQuery("Proyectos.findByNombreLike");
         q.setParameter("nombre", "%" + nombre_l + "%");        
         return resultado(q);
     }   
     
      public List<Proyectos> findByCiudad(String ciudad) {
-        Query q = em.createNamedQuery("Piezas.findByCiudad");
+        Query q = em.createNamedQuery("Proyectos.findByCiudad");
         q.setParameter("ciudad", ciudad);        
         return resultado(q);
     }
     
     public List<Proyectos> findByCiudadLike(String ciudad_l) {
-        Query q = em.createNamedQuery("Piezas.findByCiudadLike");
+        Query q = em.createNamedQuery("Proyectos.findByCiudadLike");
         q.setParameter("ciudad", "%" + ciudad_l + "%");        
         return resultado(q);
     }   

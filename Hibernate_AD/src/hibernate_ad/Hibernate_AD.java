@@ -203,11 +203,21 @@ public class Hibernate_AD {
         
     }
     
-    public static boolean insertOrUpdateProyecto(Proyectos p) throws Exception{
+    public static boolean insertProyecto(Proyectos p) throws Exception{
             
         ProyectosJpaController c_proyectos = new ProyectosJpaController();
         
         c_proyectos.create(p);
+        
+        return true;
+        
+    }
+    
+     public static boolean updateProyecto(Proyectos p) throws Exception{
+            
+        ProyectosJpaController c_proyectos = new ProyectosJpaController();
+        
+        c_proyectos.edit(p);
         
         return true;
         
