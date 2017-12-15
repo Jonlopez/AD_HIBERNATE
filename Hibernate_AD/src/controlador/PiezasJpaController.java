@@ -19,6 +19,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import modelo.Piezas;
+import modelo.Piezas;
 
 /**
  *
@@ -26,22 +27,18 @@ import modelo.Piezas;
  */
 public class PiezasJpaController implements Serializable {
 
-    public PiezasJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public PiezasJpaController() {
+         this.em = (EntityManager) EntityMan.getEntityManager();
     }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+    private EntityManager em = null;
 
     public void create(Piezas piezas) throws PreexistingEntityException, Exception {
         if (piezas.getGestionList() == null) {
             piezas.setGestionList(new ArrayList<Gestion>());
         }
-        EntityManager em = null;
+        //EntityManager em = null;
         try {
-            em = getEntityManager();
+            //em = getEntityManager();
             em.getTransaction().begin();
             List<Gestion> attachedGestionList = new ArrayList<Gestion>();
             for (Gestion gestionListGestionToAttach : piezas.getGestionList()) {
@@ -73,9 +70,9 @@ public class PiezasJpaController implements Serializable {
     }
 
     public void edit(Piezas piezas) throws IllegalOrphanException, NonexistentEntityException, Exception {
-        EntityManager em = null;
+        //EntityManager em = null;
         try {
-            em = getEntityManager();
+            //em = getEntityManager();
             em.getTransaction().begin();
             Piezas persistentPiezas = em.find(Piezas.class, piezas.getCodigo());
             List<Gestion> gestionListOld = persistentPiezas.getGestionList();
@@ -93,10 +90,13 @@ public class PiezasJpaController implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             List<Gestion> attachedGestionListNew = new ArrayList<Gestion>();
-            for (Gestion gestionListNewGestionToAttach : gestionListNew) {
-                gestionListNewGestionToAttach = em.getReference(gestionListNewGestionToAttach.getClass(), gestionListNewGestionToAttach.getGestionPK());
-                attachedGestionListNew.add(gestionListNewGestionToAttach);
+            if(gestionListNew != null){
+                for (Gestion gestionListNewGestionToAttach : gestionListNew) {
+                    gestionListNewGestionToAttach = em.getReference(gestionListNewGestionToAttach.getClass(), gestionListNewGestionToAttach.getGestionPK());
+                    attachedGestionListNew.add(gestionListNewGestionToAttach);
+                }    
             }
+            
             gestionListNew = attachedGestionListNew;
             piezas.setGestionList(gestionListNew);
             piezas = em.merge(piezas);
@@ -129,9 +129,9 @@ public class PiezasJpaController implements Serializable {
     }
 
     public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException {
-        EntityManager em = null;
+        //EntityManager em = null;
         try {
-            em = getEntityManager();
+            //em = getEntityManager();
             em.getTransaction().begin();
             Piezas piezas;
             try {
@@ -169,7 +169,7 @@ public class PiezasJpaController implements Serializable {
     }
 
     private List<Piezas> findPiezasEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
+       // EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Piezas.class));
@@ -185,7 +185,7 @@ public class PiezasJpaController implements Serializable {
     }
 
     public Piezas findPiezas(String id) {
-        EntityManager em = getEntityManager();
+       // EntityManager em = getEntityManager();
         try {
             return em.find(Piezas.class, id);
         } finally {
@@ -194,7 +194,7 @@ public class PiezasJpaController implements Serializable {
     }
 
     public int getPiezasCount() {
-        EntityManager em = getEntityManager();
+        //EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             Root<Piezas> rt = cq.from(Piezas.class);
@@ -205,5 +205,40 @@ public class PiezasJpaController implements Serializable {
             em.close();
         }
     }
+    
+     private List<Piezas> resultado(Query q){        
+        List<Piezas> lp = (List<Piezas>) q.getResultList();
+        em.close();
+        return lp;
+    }
+    
+    public List<Piezas> findAll() {
+        Query q = em.createNamedQuery("Piezas.findAll");
+        return resultado(q);
+    }
+    
+    public List<Piezas> findByCodigo(String codigo) {
+        Query q = em.createNamedQuery("Piezas.findByCodigo");
+        q.setParameter("codigo", codigo);        
+        return resultado(q);
+    }
+    
+     public List<Piezas> findByCodigoLike(String codigo_l) {
+        Query q = em.createNamedQuery("Piezas.findByCodigoLike");
+        q.setParameter("codigo", "%" + codigo_l + "%");
+        return resultado(q);
+    }
+    
+    public List<Piezas> findByNombre(String nombre) {
+        Query q = em.createNamedQuery("Piezas.findByNombre");
+        q.setParameter("nombre", nombre);        
+        return resultado(q);
+    }
+    
+    public List<Piezas> findByNombreLike(String nombre_l) {
+        Query q = em.createNamedQuery("Piezas.findByNombreLike");
+        q.setParameter("nombre", "%" + nombre_l + "%");        
+        return resultado(q);
+    }   
     
 }

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import modelo.Piezas;
 import modelo.Proyectos;
 
 /**
@@ -26,14 +27,10 @@ import modelo.Proyectos;
  */
 public class ProyectosJpaController implements Serializable {
 
-    public ProyectosJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public ProyectosJpaController() {
+        this.em = (EntityManager) EntityMan.getEntityManager();
     }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+    private EntityManager em = null;  
 
     public void create(Proyectos proyectos) throws PreexistingEntityException, Exception {
         if (proyectos.getGestionList() == null) {
@@ -41,7 +38,7 @@ public class ProyectosJpaController implements Serializable {
         }
         EntityManager em = null;
         try {
-            em = getEntityManager();
+           // em = getEntityManager();
             em.getTransaction().begin();
             List<Gestion> attachedGestionList = new ArrayList<Gestion>();
             for (Gestion gestionListGestionToAttach : proyectos.getGestionList()) {
@@ -75,7 +72,7 @@ public class ProyectosJpaController implements Serializable {
     public void edit(Proyectos proyectos) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
+            //em = getEntityManager();
             em.getTransaction().begin();
             Proyectos persistentProyectos = em.find(Proyectos.class, proyectos.getCodigo());
             List<Gestion> gestionListOld = persistentProyectos.getGestionList();
@@ -131,7 +128,7 @@ public class ProyectosJpaController implements Serializable {
     public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
-            em = getEntityManager();
+            //em = getEntityManager();
             em.getTransaction().begin();
             Proyectos proyectos;
             try {
@@ -169,7 +166,7 @@ public class ProyectosJpaController implements Serializable {
     }
 
     private List<Proyectos> findProyectosEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
+        //EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Proyectos.class));
@@ -185,7 +182,7 @@ public class ProyectosJpaController implements Serializable {
     }
 
     public Proyectos findProyectos(String id) {
-        EntityManager em = getEntityManager();
+        //EntityManager em = getEntityManager();
         try {
             return em.find(Proyectos.class, id);
         } finally {
@@ -194,7 +191,7 @@ public class ProyectosJpaController implements Serializable {
     }
 
     public int getProyectosCount() {
-        EntityManager em = getEntityManager();
+        //EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             Root<Proyectos> rt = cq.from(Proyectos.class);
@@ -205,5 +202,52 @@ public class ProyectosJpaController implements Serializable {
             em.close();
         }
     }
+    
+    private List<Proyectos> resultado(Query q){        
+        List<Proyectos> lp = (List<Proyectos>) q.getResultList();
+        em.close();
+        return lp;
+    }
+    
+    public List<Proyectos> findAll() {
+        Query q = em.createNamedQuery("Piezas.findAll");
+        return resultado(q);
+    }
+    
+    public List<Proyectos> findByCodigo(String codigo) {
+        Query q = em.createNamedQuery("Piezas.findByCodigo");
+        q.setParameter("codigo", codigo);        
+        return resultado(q);
+    }
+    
+     public List<Proyectos> findByCodigoLike(String codigo_l) {
+        Query q = em.createNamedQuery("Piezas.findByCodigoLike");
+        q.setParameter("codigo", "%" + codigo_l + "%");
+        return resultado(q);
+    }
+    
+    public List<Proyectos> findByNombre(String nombre) {
+        Query q = em.createNamedQuery("Piezas.findByNombre");
+        q.setParameter("nombre", nombre);        
+        return resultado(q);
+    }
+    
+    public List<Proyectos> findByNombreLike(String nombre_l) {
+        Query q = em.createNamedQuery("Piezas.findByNombreLike");
+        q.setParameter("nombre", "%" + nombre_l + "%");        
+        return resultado(q);
+    }   
+    
+     public List<Proyectos> findByCiudad(String ciudad) {
+        Query q = em.createNamedQuery("Piezas.findByCiudad");
+        q.setParameter("ciudad", ciudad);        
+        return resultado(q);
+    }
+    
+    public List<Proyectos> findByCiudadLike(String ciudad_l) {
+        Query q = em.createNamedQuery("Piezas.findByCiudadLike");
+        q.setParameter("ciudad", "%" + ciudad_l + "%");        
+        return resultado(q);
+    }   
     
 }
