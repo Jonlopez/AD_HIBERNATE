@@ -27,25 +27,22 @@ import modelo.Proyectos;
  */
 public class GestionJpaController implements Serializable {
 
-    public GestionJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public GestionJpaController() {
+        this.em = (EntityManager) EntityMan.getEntityManager();
     }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+    private EntityManager em = null;
 
     public void create(Gestion gestion) throws PreexistingEntityException, Exception {
         if (gestion.getGestionPK() == null) {
             gestion.setGestionPK(new GestionPK());
+            gestion.getGestionPK().setCodproveedor(gestion.getProveedores().getCodigo());
+            gestion.getGestionPK().setCodpieza(gestion.getPiezas().getCodigo());
+            gestion.getGestionPK().setCodproyecto(gestion.getProyectos().getCodigo());
         }
-        gestion.getGestionPK().setCodproveedor(gestion.getProveedores().getCodigo());
-        gestion.getGestionPK().setCodpieza(gestion.getPiezas().getCodigo());
-        gestion.getGestionPK().setCodproyecto(gestion.getProyectos().getCodigo());
-        EntityManager em = null;
+        
+        //EntityManager em = null;
         try {
-            em = getEntityManager();
+            //em = getEntityManager();
             em.getTransaction().begin();
             Piezas piezas = gestion.getPiezas();
             if (piezas != null) {
@@ -92,9 +89,9 @@ public class GestionJpaController implements Serializable {
         gestion.getGestionPK().setCodproveedor(gestion.getProveedores().getCodigo());
         gestion.getGestionPK().setCodpieza(gestion.getPiezas().getCodigo());
         gestion.getGestionPK().setCodproyecto(gestion.getProyectos().getCodigo());
-        EntityManager em = null;
+        //EntityManager em = null;
         try {
-            em = getEntityManager();
+          //  em = getEntityManager();
             em.getTransaction().begin();
             Gestion persistentGestion = em.find(Gestion.class, gestion.getGestionPK());
             Piezas piezasOld = persistentGestion.getPiezas();
@@ -158,9 +155,9 @@ public class GestionJpaController implements Serializable {
     }
 
     public void destroy(GestionPK id) throws NonexistentEntityException {
-        EntityManager em = null;
+        //EntityManager em = null;
         try {
-            em = getEntityManager();
+           // em = getEntityManager();
             em.getTransaction().begin();
             Gestion gestion;
             try {
@@ -202,7 +199,7 @@ public class GestionJpaController implements Serializable {
     }
 
     private List<Gestion> findGestionEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
+        //EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Gestion.class));
@@ -218,7 +215,7 @@ public class GestionJpaController implements Serializable {
     }
 
     public Gestion findGestion(GestionPK id) {
-        EntityManager em = getEntityManager();
+        //EntityManager em = getEntityManager();
         try {
             return em.find(Gestion.class, id);
         } finally {
@@ -227,7 +224,7 @@ public class GestionJpaController implements Serializable {
     }
 
     public int getGestionCount() {
-        EntityManager em = getEntityManager();
+       // EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             Root<Gestion> rt = cq.from(Gestion.class);
@@ -237,6 +234,17 @@ public class GestionJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+      private List<Gestion> resultado(Query q){        
+        List<Gestion> lp = (List<Gestion>) q.getResultList();
+        em.close();
+        return lp;
+    }
+    
+    public List<Gestion> findAll() {
+        Query q = em.createNamedQuery("Gestion.findAll");
+        return resultado(q);
     }
     
 }

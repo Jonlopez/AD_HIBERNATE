@@ -53,7 +53,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel10" alignment="0" pref="1077" max="32767" attributes="0"/>
+                  <Component id="jLabel10" alignment="0" pref="910" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -156,7 +156,7 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="319" max="32767" attributes="0"/>
+                              <EmptySpace pref="152" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -415,7 +415,7 @@
                                                           <Component id="jB_prov_sigui" min="-2" max="-2" attributes="0"/>
                                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                           <Component id="jB_prov_final" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace pref="261" max="32767" attributes="0"/>
+                                                          <EmptySpace pref="94" max="32767" attributes="0"/>
                                                           <Component id="jB_prov_eliminar_02" min="-2" max="-2" attributes="0"/>
                                                       </Group>
                                                       <Group type="102" attributes="0">
@@ -641,7 +641,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jScrollPane1" pref="900" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane1" pref="733" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <Component id="jComboBox_prov_filtro" min="-2" pref="151" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -853,7 +853,7 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="376" max="32767" attributes="0"/>
+                              <EmptySpace pref="209" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1112,7 +1112,7 @@
                                                           <Component id="jB_pieza_sigui" min="-2" max="-2" attributes="0"/>
                                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                           <Component id="jB_pieza_final" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace pref="292" max="32767" attributes="0"/>
+                                                          <EmptySpace pref="125" max="32767" attributes="0"/>
                                                           <Component id="jB_pieza_eliminar_02" min="-2" max="-2" attributes="0"/>
                                                       </Group>
                                                       <Group type="102" alignment="0" attributes="0">
@@ -1339,7 +1339,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jScrollPane7" alignment="1" pref="931" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane7" alignment="1" pref="764" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="jComboBox_pieza_filtro" min="-2" pref="151" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -1481,10 +1481,6 @@
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
           <SubComponents>
             <Container class="javax.swing.JTabbedPane" name="jTabbedPane5">
-              <Events>
-                <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTabbedPane5FocusGained"/>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTabbedPane5MouseClicked"/>
-              </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Gesti&#xf3;n de proyectos">
@@ -1552,7 +1548,7 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="341" max="32767" attributes="0"/>
+                              <EmptySpace pref="174" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1791,7 +1787,7 @@
                                                           <Component id="jB_proyecto_sigui" min="-2" max="-2" attributes="0"/>
                                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                           <Component id="jB_proyecto_final" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace pref="274" max="32767" attributes="0"/>
+                                                          <EmptySpace pref="107" max="32767" attributes="0"/>
                                                           <Component id="jB_proyecto_eliminar_02" min="-2" max="-2" attributes="0"/>
                                                       </Group>
                                                       <Group type="102" alignment="0" attributes="0">
@@ -1998,7 +1994,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jScrollPane8" alignment="1" pref="913" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane8" alignment="1" pref="746" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="jComboBox_proyecto_filtro" min="-2" pref="151" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -2162,43 +2158,50 @@
                               <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="114" max="-2" attributes="0"/>
+                              <EmptySpace min="114" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="jB_gG_insertar1" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="jB_gG_modificar1" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="462" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="282" max="-2" attributes="0"/>
                                       <Component id="jB_gG_eliminar_2" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jB_gG_limpiar1" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="label37" min="-2" max="-2" attributes="0"/>
-                                          <Component id="label41" min="-2" max="-2" attributes="0"/>
-                                          <Component id="label44" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jT_gG_cantidad" min="-2" pref="95" max="-2" attributes="0"/>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="jL_prov_dir_err3" min="-2" pref="18" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="jCombo_gG_cod_prov" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jCombo_gG_cod_pieza" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jCombo_gG_cod_proyecto" alignment="0" max="32767" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="jT_gG_proveedor" max="32767" attributes="0"/>
-                                          <Component id="jT_gG_pieza" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jT_gG_proyecto" alignment="0" pref="398" max="32767" attributes="0"/>
-                                      </Group>
+                                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="457" max="-2" attributes="0"/>
+                                      <Component id="jB_gG_limpiar1" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jScrollPane9" alignment="0" min="-2" pref="599" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="label37" min="-2" max="-2" attributes="0"/>
+                                              <Component id="label41" min="-2" max="-2" attributes="0"/>
+                                              <Component id="label44" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="jT_gG_cantidad" min="-2" pref="95" max="-2" attributes="0"/>
+                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                  <Component id="jL_prov_dir_err3" min="-2" pref="18" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Component id="jCombo_gG_cod_prov" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jCombo_gG_cod_pieza" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jCombo_gG_cod_proyecto" alignment="0" max="32767" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jT_gG_proveedor" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jT_gG_pieza" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jT_gG_proyecto" alignment="0" max="32767" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Component id="jScrollPane9" alignment="0" min="-2" pref="599" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
+                              <EmptySpace pref="106" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -2207,9 +2210,12 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                               <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="jB_gG_limpiar1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jB_gG_limpiar1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="label37" min="-2" max="-2" attributes="0"/>
@@ -2217,24 +2223,22 @@
                                       <Component id="label41" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jCombo_gG_cod_prov" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jT_gG_proveedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jCombo_gG_cod_prov" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jT_gG_proveedor" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jCombo_gG_cod_pieza" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jT_gG_pieza" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="jCombo_gG_cod_pieza" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jT_gG_pieza" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jCombo_gG_cod_proyecto" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jT_gG_proyecto" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="jCombo_gG_cod_proyecto" min="-2" max="-2" attributes="0"/>
                                   <Component id="label44" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jT_gG_proyecto" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
@@ -2287,32 +2291,20 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Limpiar"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jB_gG_limpiar1MouseClicked"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jB_gG_eliminar_2">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Eliminar"/>
-                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jB_gG_eliminar_2MouseClicked"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jB_gG_modificar1">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Modificar"/>
-                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jB_gG_modificar1MouseClicked"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jB_gG_insertar1">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Insertar"/>
-                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                       <Events>
                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jB_gG_insertar1MouseClicked"/>
@@ -2361,14 +2353,14 @@
                     <Component class="javax.swing.JComboBox" name="jCombo_gG_cod_prov">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="Item 1"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
+                          <StringArray count="1">
+                            <StringItem index="0" value="----------"/>
                           </StringArray>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCombo_gG_cod_provItemStateChanged"/>
+                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                       </AuxValues>
@@ -2376,14 +2368,14 @@
                     <Component class="javax.swing.JComboBox" name="jCombo_gG_cod_pieza">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="Item 1"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
+                          <StringArray count="1">
+                            <StringItem index="0" value="----------"/>
                           </StringArray>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCombo_gG_cod_piezaItemStateChanged"/>
+                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                       </AuxValues>
@@ -2391,39 +2383,44 @@
                     <Component class="javax.swing.JComboBox" name="jCombo_gG_cod_proyecto">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="Item 1"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
+                          <StringArray count="1">
+                            <StringItem index="0" value="----------"/>
                           </StringArray>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCombo_gG_cod_proyectoItemStateChanged"/>
+                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                       </AuxValues>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="jT_gG_proveedor">
+                    <Component class="javax.swing.JButton" name="jButton1">
                       <Properties>
-                        <Property name="editable" type="boolean" value="false"/>
+                        <Property name="text" type="java.lang.String" value="Recargar"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton1MouseClicked"/>
+                      </Events>
+                    </Component>
+                    <Component class="java.awt.Label" name="jT_gG_proveedor">
+                      <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="f0" green="f0" red="f0" type="rgb"/>
+                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
                         </Property>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="jT_gG_pieza">
+                    <Component class="java.awt.Label" name="jT_gG_pieza">
                       <Properties>
-                        <Property name="editable" type="boolean" value="false"/>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="f0" green="f0" red="f0" type="rgb"/>
+                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
                         </Property>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="jT_gG_proyecto">
+                    <Component class="java.awt.Label" name="jT_gG_proyecto">
                       <Properties>
-                        <Property name="editable" type="boolean" value="false"/>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="f0" green="f0" red="f0" type="rgb"/>
+                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
                         </Property>
                       </Properties>
                     </Component>
@@ -2444,7 +2441,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jScrollPane10" alignment="1" pref="863" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane10" alignment="1" pref="696" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="jComboBox_gG_filtro1" min="-2" pref="151" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -2493,14 +2490,8 @@
                           </StringArray>
                         </Property>
                       </Properties>
-                      <Events>
-                        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jComboBox_gG_filtro1ItemStateChanged"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jT_gG_filtro1">
-                      <Events>
-                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jT_gG_filtro1KeyReleased"/>
-                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane10">
                       <AuxValues>

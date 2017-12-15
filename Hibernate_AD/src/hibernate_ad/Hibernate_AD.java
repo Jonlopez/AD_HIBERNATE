@@ -6,6 +6,7 @@
 package hibernate_ad;
 
 import com.sun.deploy.uitoolkit.impl.fx.ui.MixedCodeInSwing;
+import controlador.GestionJpaController;
 import controlador.PiezasJpaController;
 import controlador.ProveedoresJpaController;
 import controlador.ProyectosJpaController;
@@ -13,6 +14,7 @@ import controlador.exceptions.IllegalOrphanException;
 import controlador.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.swing.JOptionPane;
+import modelo.Gestion;
 import modelo.Piezas;
 import modelo.Proveedores;
 import modelo.Proyectos;
@@ -73,7 +75,15 @@ public class Hibernate_AD {
 
         return c_proyectos.findAll();
         
-    }  
+    } 
+    
+     public static List<Gestion> findAllGestiones(){  
+            
+        GestionJpaController c_gestion = new GestionJpaController();
+
+        return c_gestion.findAll();
+        
+    } 
     
     public static List<Proveedores> findProveedorByFiltro(int select,  String filtro){
     
@@ -222,6 +232,16 @@ public class Hibernate_AD {
         return true;
         
     }
+     
+     public static boolean insertGestion(Gestion g) throws Exception{
+         
+        GestionJpaController c_gestion = new GestionJpaController();
+         
+        c_gestion.create(g);
+        
+        return true;
+         
+     }
     
     public static boolean deleteProveedor(Proveedores p){
             
