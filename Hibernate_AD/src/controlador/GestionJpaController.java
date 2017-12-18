@@ -86,9 +86,14 @@ public class GestionJpaController implements Serializable {
     }
 
     public void edit(Gestion gestion) throws NonexistentEntityException, Exception {
-        gestion.getGestionPK().setCodproveedor(gestion.getProveedores().getCodigo());
-        gestion.getGestionPK().setCodpieza(gestion.getPiezas().getCodigo());
-        gestion.getGestionPK().setCodproyecto(gestion.getProyectos().getCodigo());
+        
+        if (gestion.getGestionPK() == null) {
+            gestion.setGestionPK(new GestionPK());
+            gestion.getGestionPK().setCodproveedor(gestion.getProveedores().getCodigo());
+            gestion.getGestionPK().setCodpieza(gestion.getPiezas().getCodigo());
+            gestion.getGestionPK().setCodproyecto(gestion.getProyectos().getCodigo());
+        }
+        
         //EntityManager em = null;
         try {
           //  em = getEntityManager();
@@ -154,7 +159,10 @@ public class GestionJpaController implements Serializable {
         }
     }
 
-    public void destroy(GestionPK id) throws NonexistentEntityException {
+    public void destroy(Gestion g) throws NonexistentEntityException {
+        
+        GestionPK id = g.getGestionPK();
+        
         //EntityManager em = null;
         try {
            // em = getEntityManager();
@@ -166,23 +174,10 @@ public class GestionJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The gestion with id " + id + " no longer exists.", enfe);
             }
-            Piezas piezas = gestion.getPiezas();
-            if (piezas != null) {
-                piezas.getGestionList().remove(gestion);
-                piezas = em.merge(piezas);
-            }
-            Proveedores proveedores = gestion.getProveedores();
-            if (proveedores != null) {
-                proveedores.getGestionList().remove(gestion);
-                proveedores = em.merge(proveedores);
-            }
-            Proyectos proyectos = gestion.getProyectos();
-            if (proyectos != null) {
-                proyectos.getGestionList().remove(gestion);
-                proyectos = em.merge(proyectos);
-            }
-            em.remove(gestion);
-            em.getTransaction().commit();
+            
+            em.remove(em.merge(g));
+            em.getTransaction().commit(); 
+           
         } finally {
             if (em != null) {
                 em.close();
@@ -246,5 +241,15 @@ public class GestionJpaController implements Serializable {
         Query q = em.createNamedQuery("Gestion.findAll");
         return resultado(q);
     }
+    
+    
+    public List<Gestion> findByGestionPK(GestionPK gestionPK) {
+        Query q = em.createNamedQuery("Gestion.findByGestionPK");
+        q.setParameter("codproveedor", gestionPK.getCodproveedor());
+        q.setParameter("codpieza", gestionPK.getCodpieza());
+        q.setParameter("codproyecto", gestionPK.getCodproyecto());
+        return resultado(q);
+    }
+    
     
 }

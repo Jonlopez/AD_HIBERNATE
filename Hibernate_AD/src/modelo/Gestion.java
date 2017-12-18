@@ -29,7 +29,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Gestion.findByCodproveedor", query = "SELECT g FROM Gestion g WHERE g.gestionPK.codproveedor = :codproveedor"),
     @NamedQuery(name = "Gestion.findByCodpieza", query = "SELECT g FROM Gestion g WHERE g.gestionPK.codpieza = :codpieza"),
     @NamedQuery(name = "Gestion.findByCodproyecto", query = "SELECT g FROM Gestion g WHERE g.gestionPK.codproyecto = :codproyecto"),
-    @NamedQuery(name = "Gestion.findByCantidad", query = "SELECT g FROM Gestion g WHERE g.cantidad = :cantidad")})
+    @NamedQuery(name = "Gestion.findByCantidad", query = "SELECT g FROM Gestion g WHERE g.cantidad = :cantidad"),
+    @NamedQuery(name = "Gestion.findByGestionPK", query = 
+            "SELECT g FROM Gestion g "
+                    + "WHERE g.gestionPK.codproveedor = :codproveedor "
+                    + "AND g.gestionPK.codpieza = :codpieza "
+                    + "AND g.gestionPK.codproyecto = :codproyecto"),
+})
 public class Gestion implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.swing.JOptionPane;
 import modelo.Proyectos;
 
 /**
@@ -148,6 +149,9 @@ public class ProyectosJpaController implements Serializable {
                 illegalOrphanMessages.add("This Proyectos (" + proyectos + ") cannot be destroyed since the Gestion " + gestionListOrphanCheckGestion + " in its gestionList field has a non-nullable proyectos field.");
             }
             if (illegalOrphanMessages != null) {
+                
+                JOptionPane.showMessageDialog(null, "No se puede eliminar el proyecto porque todavía hay gestiones relacionadas con el mismo");
+                
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(proyectos);

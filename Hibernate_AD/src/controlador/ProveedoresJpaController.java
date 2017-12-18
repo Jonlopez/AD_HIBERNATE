@@ -5,10 +5,17 @@
  */
 package controlador;
 
+import controlador.exceptions.IllegalOrphanException;
+import controlador.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
+import javax.swing.JOptionPane;
+import modelo.Gestion;
+import modelo.Piezas;
 //import javax.persistence.EntityManagerFactory;
 import modelo.Proveedores;
 
@@ -32,11 +39,39 @@ public class ProveedoresJpaController implements Serializable {
         em.close();
     }
     
-    public void delete(Proveedores p){
-        em.getTransaction().begin();
-        em.remove(em.merge(p));
-        em.getTransaction().commit();
-        em.close();
+    public void delete(String id) throws NonexistentEntityException, IllegalOrphanException{
+        
+        try {
+            //em = getEntityManager();
+            em.getTransaction().begin();
+            Proveedores proveedores;
+            try {
+                proveedores = em.getReference(Proveedores.class, id);
+                proveedores.getCodigo();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("The piezas with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<Gestion> gestionListOrphanCheck = proveedores.getGestionList();
+            for (Gestion gestionListOrphanCheckGestion : gestionListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Proveedores (" + proveedores + ") cannot be destroyed since the Gestion " + gestionListOrphanCheckGestion + " in its gestionList field has a non-nullable piezas field.");
+            }
+            if (illegalOrphanMessages != null) {
+                
+                JOptionPane.showMessageDialog(null, "No se puede eliminar el proveedor porque todavía hay gestiones relacionadas con el mismo");
+                
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            em.remove(proveedores);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }    
     
     private List<Proveedores> resultado(Query q){        

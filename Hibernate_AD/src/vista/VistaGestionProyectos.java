@@ -75,6 +75,9 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     
     private DefaultTableModel dtm_gestion; //Modelo de la tabla de gestiones globales
     private List<Gestion>arr_gestiones = null; //gestiones
+    private Gestion mod_gestion = null; //Proyecto encontrado a la hora de insertar uno nuevo, posibilidad de modificarlo o eliminarlo
+    private final int MAX_GG_CANTIDAD = 6;
+    
     
     public VistaGestionProyectos
         (
@@ -264,15 +267,26 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         
         boolean valido = false;        
         
-        if(jT_pieza_cod_01.getText().equals("")
-            || jT_pieza_nombre_01.getText().equals("")
-            || jT_pieza_precio_01.getText().equals("")
-            || jT_pieza_desc_01.getText().equals("")){
-            
-            jT_pieza_sms_error.setText(" Revisa los campos, todos son obligatorios");                    
-            
-        }else
-            valido = true;
+        try{
+        
+            if(jT_pieza_cod_01.getText().equals("")
+                || jT_pieza_nombre_01.getText().equals("")
+                || jT_pieza_precio_01.getText().equals("")
+                || jT_pieza_desc_01.getText().equals("")){
+
+                jT_pieza_sms_error.setText(" Revisa los campos, todos son obligatorios");                    
+
+            }else
+                if(Float.parseFloat(jT_pieza_precio_01.getText()) > 0)
+                
+                    valido = true;
+                
+        
+        }catch(NumberFormatException ex){                
+                
+            JOptionPane.showMessageDialog(null, "El precio no es valido");    
+                
+        }
         
         return valido;
         
@@ -281,30 +295,20 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     private Piezas rellenarPieza(String cod_mod){
         
         if(validacionesPieza()){
-            
-            try{
                  
-                String codigo = (cod_mod != null)?cod_mod:((jT_pieza_cod_01.getText().length() > MAX_PROV_COD)?jT_pieza_cod_01.getText().substring(0, MAX_PROV_COD):jT_pieza_cod_01.getText()).toUpperCase();
-        
-                String nombre = ((jT_pieza_nombre_01.getText().length() > MAX_PROV_NOMBRE)?jT_pieza_nombre_01.getText().substring(0, MAX_PROV_NOMBRE):jT_pieza_nombre_01.getText());
-            
-                Float precio = (Float) Float.parseFloat((jT_pieza_precio_01.getText().length() > MAX_PROV_APELLIDO)?jT_pieza_precio_01.getText().substring(0, MAX_PROV_APELLIDO):jT_pieza_precio_01.getText());                
-                
-                String descripcion = ((jT_pieza_desc_01.getText().length() > MAX_PROV_DIR)?jT_pieza_desc_01.getText().substring(0, MAX_PROV_DIR):jT_pieza_desc_01.getText());
+            String codigo = (cod_mod != null)?cod_mod:((jT_pieza_cod_01.getText().length() > MAX_PROV_COD)?jT_pieza_cod_01.getText().substring(0, MAX_PROV_COD):jT_pieza_cod_01.getText()).toUpperCase();
 
-                Piezas pieza = new Piezas(codigo, nombre, precio);
-            
-                pieza.setDescripcion(descripcion);
-            
-                return pieza;  
-                
-            }catch(NumberFormatException ex){                
-                
-                JOptionPane.showMessageDialog(null, "El precio no es valido");    
-                
-                return null;
-                
-            }
+            String nombre = ((jT_pieza_nombre_01.getText().length() > MAX_PROV_NOMBRE)?jT_pieza_nombre_01.getText().substring(0, MAX_PROV_NOMBRE):jT_pieza_nombre_01.getText());
+
+            Float precio = (Float) Float.parseFloat((jT_pieza_precio_01.getText().length() > MAX_PROV_APELLIDO)?jT_pieza_precio_01.getText().substring(0, MAX_PROV_APELLIDO):jT_pieza_precio_01.getText());                
+
+            String descripcion = ((jT_pieza_desc_01.getText().length() > MAX_PROV_DIR)?jT_pieza_desc_01.getText().substring(0, MAX_PROV_DIR):jT_pieza_desc_01.getText());
+
+            Piezas pieza = new Piezas(codigo, nombre, precio);
+
+            pieza.setDescripcion(descripcion);
+
+            return pieza;  
             
         }else
             
@@ -356,8 +360,7 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         
         jB_proyecto_eliminar_01.setEnabled(false);
         
-    }
-    
+    }    
     
     private boolean validacionesProyecto(){
         
@@ -398,48 +401,8 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     
     /**
      * Metodos personalizados para gestion global
-     */
-    
-    private boolean validacionesGestion(){
-        
-        boolean valido = false;        
-        
-        if(jT_proyecto_cod_01.getText().equals("")
-            || jT_proyecto_nombre_01.getText().equals("")
-            || jT_proyecto_ciudad_01.getText().equals("")){
-            
-            jT_proyecto_sms_error.setText(" Revisa los campos, todos son obligatorios");                    
-            
-        }else
-            valido = true;
-        
-        return true;
-        
-    }
-    
-    private Gestion rellenarGestion(String cod_mod){
-        
-        if(validacionesGestion()){
-                 
-            String cod_prov = (cod_mod != null)?cod_mod:jCombo_gG_cod_prov.getSelectedItem().toString();
-
-            String cod_pieza = (cod_mod != null)?cod_mod:jCombo_gG_cod_pieza.getSelectedItem().toString();
-
-            String cod_proyecto = (cod_mod != null)?cod_mod:jCombo_gG_cod_proyecto.getSelectedItem().toString();
-
-            Float cantidad = (Float) Float.parseFloat(jT_gG_cantidad.getText());    
-            
-            GestionPK gestionPk = new GestionPK(cod_prov, cod_pieza, cod_proyecto);
-            
-            Gestion gestion = new Gestion(gestionPk, cantidad);    
-
-            return gestion;  
-            
-        }else
-            
-            return null;
-        
-    }
+     */    
+       
     
     private void pintarGestionTabla(Gestion cur_gestion){
         
@@ -456,7 +419,144 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         dtm_gestion.addRow(fila);
         
     }
+    
+    private void limpiarGestion(){
+        
+        jCombo_gG_cod_prov.setSelectedIndex(0);
+        
+        jCombo_gG_cod_pieza.setSelectedIndex(0);
+        
+        jCombo_gG_cod_proyecto.setSelectedIndex(0);
+                        
+        jT_gG_proveedor.setText("");
+        
+        jT_gG_pieza.setText("");
+        
+        jT_gG_proyecto.setText("");
+        
+        jT_gG_cantidad.setText("");
+        
+        jT_gG_sms_error1.setText("");
+        
+        jB_gG_insertar1.setEnabled(false);
+        
+        jB_gG_modificar1.setEnabled(false);
+        
+        jB_gG_eliminar_2.setEnabled(false);
+        
+    }    
+    
+    private boolean validacionesGestion(){
+        
+        boolean valido = false;   
+        
+        try{
+            
+            if(jT_gG_cantidad.getText().equals("")
+            || jT_gG_cantidad.getText().equals("")
+            || jT_gG_cantidad.getText().equals("")
+            || jT_gG_cantidad.getText().equals("")){
+            
+            jT_gG_sms_error1.setText(" Revisa los campos, todos son obligatorios");                    
+            
+            }else 
+                if(Float.parseFloat(jT_gG_cantidad.getText()) > 0)
+                
+                    valido = true;
+            
+        }catch(NumberFormatException ex){                
+                
+            JOptionPane.showMessageDialog(null, "La cantidad no es valida");    
 
+        }
+        
+        return valido;
+        
+    }
+        
+    private Gestion rellenarGestion(GestionPK gestionPk){
+        
+        if(validacionesGestion()){
+            
+            if(gestionPk == null){
+                
+                String cod_prov = jCombo_gG_cod_prov.getSelectedItem().toString();
+
+                String cod_pieza = jCombo_gG_cod_pieza.getSelectedItem().toString();
+
+                String cod_proyecto = jCombo_gG_cod_proyecto.getSelectedItem().toString();                
+
+                gestionPk = new GestionPK(cod_prov, cod_pieza, cod_proyecto);
+                
+            }
+            
+            Float cantidad = (Float) Float.parseFloat(jT_gG_cantidad.getText());    
+
+            Gestion gestion = new Gestion(gestionPk, cantidad);    
+
+            return gestion;  
+            
+        }else
+            
+            return null;
+        
+    }
+    
+    private void exiteGestion(){     
+               
+        if(jCombo_gG_cod_prov.getSelectedIndex() > 0
+            && jCombo_gG_cod_pieza.getSelectedIndex() > 0
+            && jCombo_gG_cod_proyecto.getSelectedIndex() > 0){
+            
+            GestionPK gestionPK = 
+                    new GestionPK(
+                            jCombo_gG_cod_prov.getSelectedItem().toString(),
+                            jCombo_gG_cod_pieza.getSelectedItem().toString(),
+                            jCombo_gG_cod_proyecto.getSelectedItem().toString()
+                    );
+            
+            arr_gestiones = Hibernate_AD.findGestionByFiltro(0, gestionPK);   
+            
+            if(arr_gestiones != null && arr_gestiones.size() > 0){
+          
+              jB_gG_insertar1.setEnabled(false);
+              
+              jB_gG_modificar1.setEnabled(true);
+              
+              jB_gG_eliminar_2.setEnabled(true);
+              
+              jT_gG_cantidad.setText(((Float) arr_gestiones.get(0).getCantidad()).toString());
+              
+              mod_gestion = arr_gestiones.get(0);
+                
+            }else{        
+                
+                jB_gG_insertar1.setEnabled(true);
+                
+                jB_gG_modificar1.setEnabled(false);
+                
+                jB_gG_eliminar_2.setEnabled(false);
+                
+                mod_gestion = null;
+                
+            }
+            
+        }else{
+            
+            mod_gestion = null;
+            
+            jB_gG_insertar1.setEnabled(false);
+              
+            jB_gG_modificar1.setEnabled(false);
+              
+            jB_gG_eliminar_2.setEnabled(false);
+              
+            jT_gG_cantidad.setText("");
+            
+        }
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -634,20 +734,20 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         jCombo_gG_cod_prov = new javax.swing.JComboBox<String>();
         jCombo_gG_cod_pieza = new javax.swing.JComboBox<String>();
         jCombo_gG_cod_proyecto = new javax.swing.JComboBox<String>();
-        jButton1 = new javax.swing.JButton();
+        jB_gG_recarga = new javax.swing.JButton();
         jT_gG_proveedor = new java.awt.Label();
         jT_gG_pieza = new java.awt.Label();
         jT_gG_proyecto = new java.awt.Label();
         jPanel6 = new javax.swing.JPanel();
-        jComboBox_gG_filtro1 = new javax.swing.JComboBox();
-        jT_gG_filtro1 = new javax.swing.JTextField();
         jScrollPane10 = new javax.swing.JScrollPane();
         jTable_gG = new javax.swing.JTable();
-        label45 = new java.awt.Label();
         jB_proyecto_gG_ejecutar1 = new javax.swing.JButton();
         jTabbedPane9 = new javax.swing.JTabbedPane();
         jTabbedPane10 = new javax.swing.JTabbedPane();
         jTabbedPane11 = new javax.swing.JTabbedPane();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gestión de Proyectos");
@@ -1921,12 +2021,30 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         label44.setText("Código de proyecto");
 
         jB_gG_limpiar1.setText("Limpiar");
+        jB_gG_limpiar1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jB_gG_limpiar1MouseClicked(evt);
+            }
+        });
 
         jB_gG_eliminar_2.setText("Eliminar");
+        jB_gG_eliminar_2.setEnabled(false);
+        jB_gG_eliminar_2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jB_gG_eliminar_2MouseClicked(evt);
+            }
+        });
 
         jB_gG_modificar1.setText("Modificar");
+        jB_gG_modificar1.setEnabled(false);
+        jB_gG_modificar1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jB_gG_modificar1MouseClicked(evt);
+            }
+        });
 
         jB_gG_insertar1.setText("Insertar");
+        jB_gG_insertar1.setEnabled(false);
         jB_gG_insertar1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jB_gG_insertar1MouseClicked(evt);
@@ -1967,10 +2085,10 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Recargar");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        jB_gG_recarga.setText("Recargar");
+        jB_gG_recarga.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                jB_gG_recargaMouseClicked(evt);
             }
         });
 
@@ -1997,7 +2115,7 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
                         .addGap(282, 282, 282)
                         .addComponent(jB_gG_eliminar_2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(jB_gG_recarga)
                         .addGap(457, 457, 457)
                         .addComponent(jB_gG_limpiar1))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -2031,7 +2149,7 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
                 .addComponent(jLabel17)
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(jB_gG_recarga)
                     .addComponent(jB_gG_limpiar1))
                 .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2073,8 +2191,6 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
 
         jTabbedPane8.addTab("Gestión Global", jPanel1);
 
-        jComboBox_gG_filtro1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Por proveedor", "Por pieza", "Por proyecto" }));
-
         jTable_gG.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -2100,9 +2216,6 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         });
         jScrollPane10.setViewportView(jTable_gG);
 
-        label45.setForeground(new java.awt.Color(204, 0, 51));
-        label45.setText("*");
-
         jB_proyecto_gG_ejecutar1.setText("Ejecutar");
         jB_proyecto_gG_ejecutar1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2119,11 +2232,6 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jComboBox_gG_filtro1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jT_gG_filtro1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(label45, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jB_proyecto_gG_ejecutar1)))
                 .addContainerGap())
@@ -2131,15 +2239,8 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jB_proyecto_gG_ejecutar1)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel6Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jComboBox_gG_filtro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jT_gG_filtro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(label45, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(8, 8, 8)
+                .addComponent(jB_proyecto_gG_ejecutar1)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -2153,6 +2254,25 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         jT_gestionGlobal.addTab("Estadísticas", jTabbedPane11);
 
         jTabbedPane1.addTab("Gestión Global", jT_gestionGlobal);
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Autor: Jon López Garrido 9FDAM-DA\nProduct Version: NetBeans IDE 8.0.2 (Build 201411181905)\nUpdates: NetBeans IDE is updated to version NetBeans 8.0.2 Patch 2\nJava: 1.8.0_25; Java HotSpot(TM) 64-Bit Server VM 25.25-b02\nRuntime: Java(TM) SE Runtime Environment 1.8.0_25-b18\nSystem: Windows 8 version 6.2 running on amd64; Cp1252; es_ES (nb)\nUser directory: C:\\Users\\Pepe\\AppData\\Roaming\\NetBeans\\8.0.2\nCache directory: C:\\Users\\Pepe\\AppData\\Local\\NetBeans\\Cache\\8.0.2");
+        jScrollPane2.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 910, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Ayuda", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -2173,24 +2293,30 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
                   
         try{  
             
-            Proveedores p = rellenarProveedor(null); 
-            
-            if(p != null){
+            if(jB_prov_insertar.isEnabled()){
                 
-                if(Hibernate_AD.insertOrUpdateProveedor(p)){
+                Proveedores p = rellenarProveedor(null); 
 
-                    JOptionPane.showMessageDialog(null, "Datos de proveedor agregados correctamente");            
+                if(p != null){
 
-                    limpiarProveedor();
+                    if(Hibernate_AD.insertOrUpdateProveedor(p)){
 
-                }else
+                        JOptionPane.showMessageDialog(null, "Datos de proveedor agregados correctamente");            
 
-                    JOptionPane.showMessageDialog(null, "No se ha podido grabar el nuevo proveedor");      
+                        limpiarProveedor();
+
+                    }else
+
+                        JOptionPane.showMessageDialog(null, "No se ha podido grabar el nuevo proveedor");      
+                }
+
             }
             
         }
         catch(Exception ex){
+            
             Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
         
         
@@ -2199,82 +2325,98 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     private void jB_prov_eject_consultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_eject_consultaMouseClicked
         // TODO add your handling code here:       
          
-        this.arr_proveedores = Hibernate_AD.findAllProveedores();
-         
-        if(arr_proveedores != null && arr_proveedores.size() > 0){
-            
-            jT_prov_min.setText( "1" );
-            
-            Integer max = arr_proveedores.size();  
-            
-            jT_prov_max.setText( max.toString() );
-            
-            pintarProveedorListado(arr_proveedores.get(0));
-            
-        }        
+        if(jB_prov_eject_consulta.isEnabled()){
+                    
+            this.arr_proveedores = Hibernate_AD.findAllProveedores();
+
+            if(arr_proveedores != null && arr_proveedores.size() > 0){
+
+                jT_prov_min.setText( "1" );
+
+                Integer max = arr_proveedores.size();  
+
+                jT_prov_max.setText( max.toString() );
+
+                pintarProveedorListado(arr_proveedores.get(0));
+
+            }        
+
+        }
         
     }//GEN-LAST:event_jB_prov_eject_consultaMouseClicked
    
     private void jB_prov_inicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_inicioMouseClicked
         // TODO add your handling code here:    
         
-        if(arr_proveedores != null && arr_proveedores.size() > 0){   
+        if(jB_prov_inicio.isEnabled()){
             
-            pintarProveedorListado(arr_proveedores.get(0));   
+            if(arr_proveedores != null && arr_proveedores.size() > 0){   
             
-            jT_prov_min.setText( "1" );
+                pintarProveedorListado(arr_proveedores.get(0));   
+
+                jT_prov_min.setText( "1" );
+
+                nav_prov = 0;
+
+            } 
             
-            nav_prov = 0;
-            
-        }          
+        }                 
         
     }//GEN-LAST:event_jB_prov_inicioMouseClicked
 
     private void jB_prov_finalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_finalMouseClicked
         // TODO add your handling code here:
         
-        if(arr_proveedores != null && arr_proveedores.size() > 0){   
+        if(jB_prov_inicio.isEnabled()){
             
-            pintarProveedorListado(arr_proveedores.get((arr_proveedores.size() - 1)));
+            if(arr_proveedores != null && arr_proveedores.size() > 0){   
+
+               pintarProveedorListado(arr_proveedores.get((arr_proveedores.size() - 1)));
+
+               Integer min = arr_proveedores.size();   
+
+               jT_prov_min.setText( min.toString() );
+
+               nav_prov = (arr_proveedores.size() - 1);
+
+           }    
             
-            Integer min = arr_proveedores.size();   
-            
-            jT_prov_min.setText( min.toString() );
-            
-            nav_prov = (arr_proveedores.size() - 1);
-            
-        } 
+        }
         
     }//GEN-LAST:event_jB_prov_finalMouseClicked
 
     private void jB_prov_antMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_antMouseClicked
         // TODO add your handling code here:
         
-        if(arr_proveedores != null && arr_proveedores.size() > 0){
+        if(jB_prov_ant.isEnabled()){
+         
+            if(arr_proveedores != null && arr_proveedores.size() > 0){
             
-            if( (nav_prov - 1)>=0){
-                
-                pintarProveedorListado(arr_proveedores.get(nav_prov - 1));
-                
-                Integer min = nav_prov; 
-                
-                jT_prov_min.setText( min.toString() );
-                
-                nav_prov = nav_prov - 1;
-                
-            }else{
-                
-                pintarProveedorListado(arr_proveedores.get((arr_proveedores.size() - 1)));
-                
-                Integer min = arr_proveedores.size();  
-                
-                jT_prov_min.setText( min.toString() );
-                
-                nav_prov = arr_proveedores.size() - 1;
-                
-            }
+                if( (nav_prov - 1)>=0){
+
+                    pintarProveedorListado(arr_proveedores.get(nav_prov - 1));
+
+                    Integer min = nav_prov; 
+
+                    jT_prov_min.setText( min.toString() );
+
+                    nav_prov = nav_prov - 1;
+
+                }else{
+
+                    pintarProveedorListado(arr_proveedores.get((arr_proveedores.size() - 1)));
+
+                    Integer min = arr_proveedores.size();  
+
+                    jT_prov_min.setText( min.toString() );
+
+                    nav_prov = arr_proveedores.size() - 1;
+
+                }
+
+            } 
             
-        } 
+        }
         
     }//GEN-LAST:event_jB_prov_antMouseClicked
 
@@ -2309,64 +2451,69 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
 
     private void jB_prov_eliminar_02MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_eliminar_02MouseClicked
         // TODO add your handling code here:
+        if(jB_prov_eliminar_02.isEnabled()){
         
-        if(arr_proveedores != null && arr_proveedores.size() > 0){            
+            if(arr_proveedores != null && arr_proveedores.size() > 0){            
             
-            if(Hibernate_AD.deleteProveedor(arr_proveedores.get(nav_prov))){
-                
-                JOptionPane.showMessageDialog(this, "Proveedor ( " + arr_proveedores.get(nav_prov).getNombre() + " )  eliminado correcamente.");
-                
-                arr_proveedores.remove(nav_prov);
-                
-                if(arr_proveedores.size() > 0){
-                    
-                    if((nav_prov - 1)>=0){
-                    
-                        pintarProveedorListado(arr_proveedores.get(nav_prov - 1));
-
-                        Integer min = nav_prov;   
-
-                        jT_prov_min.setText( min.toString() );
-
-                        nav_prov = nav_prov - 1;
-                    
-                    }else{
-
-                        pintarProveedorListado(arr_proveedores.get((arr_proveedores.size() - 1)));
-
-                        Integer min = arr_proveedores.size();     
-
-                        jT_prov_min.setText( min.toString() );
-
-                        nav_prov = arr_proveedores.size() - 1;
-
-                    }
-             
-                    Integer max = arr_proveedores.size();         
-
-                    jT_prov_max.setText( max.toString() );
-                    
-                }else{
+                try {
+                    if(Hibernate_AD.deleteProveedor(arr_proveedores.get(nav_prov))){
                         
-                    jT_prov_min.setText( "0" );
-
-                    jT_prov_max.setText( "000" );
-
-                    pintarPiezaListado(new Piezas());
-
+                        JOptionPane.showMessageDialog(this, "Proveedor ( " + arr_proveedores.get(nav_prov).getNombre() + " )  eliminado correcamente.");
+                        
+                        arr_proveedores.remove(nav_prov);
+                        
+                        if(arr_proveedores.size() > 0){
+                            
+                            if((nav_prov - 1)>=0){
+                                
+                                pintarProveedorListado(arr_proveedores.get(nav_prov - 1));
+                                
+                                Integer min = nav_prov;
+                                
+                                jT_prov_min.setText( min.toString() );
+                                
+                                nav_prov = nav_prov - 1;
+                                
+                            }else{
+                                
+                                pintarProveedorListado(arr_proveedores.get((arr_proveedores.size() - 1)));
+                                
+                                Integer min = arr_proveedores.size();
+                                
+                                jT_prov_min.setText( min.toString() );
+                                
+                                nav_prov = arr_proveedores.size() - 1;
+                                
+                            }
+                            
+                            Integer max = arr_proveedores.size();
+                            
+                            jT_prov_max.setText( max.toString() );
+                            
+                        }else{
+                            
+                            jT_prov_min.setText( "0" );
+                            
+                            jT_prov_max.setText( "000" );
+                            
+                            pintarProveedorListado(new Proveedores());
+                            
+                        }
+                        
+                    }else
+                        
+                        JOptionPane.showMessageDialog(this, "Proveedor ( " + arr_proveedores.get(nav_prov).getNombre() + " )  no se ha podido eliminar.");
+                } catch (NonexistentEntityException ex) {
+                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalOrphanException ex) {
+                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-                
-                
-            }else
-                
-                JOptionPane.showMessageDialog(this, "Proveedor ( " + arr_proveedores.get(nav_prov).getNombre() + " )  no se ha podido eliminar.");
-                         
-        }         
+
+            }
+            
+        }   
         
     }//GEN-LAST:event_jB_prov_eliminar_02MouseClicked
-
-    
     
     private void jB_prov_limpiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_limpiarMouseClicked
         // TODO add your handling code here:
@@ -2426,19 +2573,28 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     
     private void jB_prov_eliminar_01MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_prov_eliminar_01MouseClicked
         // TODO add your handling code here:
-        
-         if(mod_prov != null){     
+        if(jB_prov_eliminar_01.isEnabled()){
+         
+            if(mod_prov != null){     
             
-            if(Hibernate_AD.deleteProveedor(mod_prov)){
-                
-                JOptionPane.showMessageDialog(this, "Proveedor ( " + arr_proveedores.get(nav_prov).getNombre() + " )  eliminado correcamente.");
-                
-                limpiarProveedor();
-                
-            }else
-                
-                JOptionPane.showMessageDialog(this, "Proveedor ( " + arr_proveedores.get(nav_prov).getNombre() + " )  no se ha podido eliminar.");
-                            
+                try {
+                    if(Hibernate_AD.deleteProveedor(mod_prov)){
+                        
+                        JOptionPane.showMessageDialog(this, "Proveedor ( " + arr_proveedores.get(nav_prov).getNombre() + " )  eliminado correcamente.");
+                        
+                        limpiarProveedor();
+                        
+                    }else
+                        
+                        JOptionPane.showMessageDialog(this, "Proveedor ( " + arr_proveedores.get(nav_prov).getNombre() + " )  no se ha podido eliminar.");
+                } catch (NonexistentEntityException ex) {
+                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalOrphanException ex) {
+                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            
         }
         
     }//GEN-LAST:event_jB_prov_eliminar_01MouseClicked
@@ -2594,81 +2750,97 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
 
     private void jB_pieza_eliminar_01MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_pieza_eliminar_01MouseClicked
         // TODO add your handling code here:
-        
-       if(mod_pieza != null){     
+       
+       if(jB_pieza_eliminar_01.isEnabled()){
+           
+           if(mod_pieza != null){     
             
-           try {
-               if(Hibernate_AD.deletePieza(mod_pieza)){
-                   
-                   JOptionPane.showMessageDialog(this, "Pieza ( " + arr_piezas.get(nav_pieza).getNombre() + " )  eliminado correcamente.");
-                   
-                   limpiarPieza();
-                   
-               }else
-                   
-                   JOptionPane.showMessageDialog(this, "Pieza ( " + arr_piezas.get(nav_pieza).getNombre() + " )  no se ha podido eliminar.");
-               
-           } catch (IllegalOrphanException ex) {
-               
-               Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
-               
-           } catch (NonexistentEntityException ex) {
-               
-               Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
-               
-           }
-                            
-        }
+            try {
+                
+                if(Hibernate_AD.deletePieza(mod_pieza)){
+
+                    JOptionPane.showMessageDialog(this, "Pieza ( " + arr_piezas.get(nav_pieza).getNombre() + " )  eliminado correcamente.");
+
+                    limpiarPieza();
+
+                }else
+
+                    JOptionPane.showMessageDialog(this, "Pieza ( " + arr_piezas.get(nav_pieza).getNombre() + " )  no se ha podido eliminar.");
+
+            } catch (IllegalOrphanException ex) {
+
+                Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+            } catch (NonexistentEntityException ex) {
+
+                Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+            }
+
+         }
+           
+       } 
        
     }//GEN-LAST:event_jB_pieza_eliminar_01MouseClicked
 
     private void jB_pieza_modificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_pieza_modificarMouseClicked
         // TODO add your handling code here:
-         if(mod_pieza != null){            
-           
-            Piezas p = rellenarPieza(mod_pieza.getCodigo());
+        
+        if(jB_pieza_modificar.isEnabled()){
             
-            if(p != null){
-                
-                try {
-                    
-                    if(Hibernate_AD.updatePieza(p))            {
-                        
-                        JOptionPane.showMessageDialog(null, "Datos de la pieza (" + p.getCodigo()+ ") modificados correctamente");
-                        
-                        limpiarPieza();
-                        
-                    }else
-                        
-                        JOptionPane.showMessageDialog(null, "Los datos de la pieza (" + p.getCodigo()+ ") no se pudieron modifcar");
-                    
-                } catch (Exception ex) {
-                    
-                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
-                    
-                }
-            }
-                            
+            if(mod_pieza != null){            
+
+               Piezas p = rellenarPieza(mod_pieza.getCodigo());
+
+               if(p != null){
+
+                   try {
+
+                       if(Hibernate_AD.updatePieza(p))            {
+
+                           JOptionPane.showMessageDialog(null, "Datos de la pieza (" + p.getCodigo()+ ") modificados correctamente");
+
+                           limpiarPieza();
+
+                       }else
+
+                           JOptionPane.showMessageDialog(null, "Los datos de la pieza (" + p.getCodigo()+ ") no se pudieron modifcar");
+
+                   } catch (Exception ex) {
+
+                       Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+                   }
+                   
+               }
+
+           }   
+            
         }
+         
     }//GEN-LAST:event_jB_pieza_modificarMouseClicked
 
     private void jB_pieza_insertarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_pieza_insertarMouseClicked
         // TODO add your handling code here:
         try{  
             
-            Piezas p = rellenarPieza(null); 
-            
-            if(p != null){
+            if(jB_pieza_insertar.isEnabled()){
                 
-                if(Hibernate_AD.insertPieza(p)){
+               Piezas p = rellenarPieza(null); 
 
-                    JOptionPane.showMessageDialog(null, "Datos de pieza agregados correctamente");            
+               if(p != null){
 
-                    limpiarPieza();
+                   if(Hibernate_AD.insertPieza(p)){
 
-                }else
+                       JOptionPane.showMessageDialog(null, "Datos de pieza agregados correctamente");            
 
-                    JOptionPane.showMessageDialog(null, "No se ha podido grabar la nueva pieza");      
+                       limpiarPieza();
+
+                   }else
+
+                       JOptionPane.showMessageDialog(null, "No se ha podido grabar la nueva pieza");      
+               }   
+                
             }
             
         }
@@ -2680,69 +2852,73 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     private void jB_pieza_eliminar_02MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_pieza_eliminar_02MouseClicked
         // TODO add your handling code here:
         
-        if(arr_piezas != null && arr_piezas.size() > 0){
+        if(jB_pieza_eliminar_02.isEnabled()){
+         
+            if(arr_piezas != null && arr_piezas.size() > 0){
             
-            try {
-                
-                if(Hibernate_AD.deletePieza(arr_piezas.get(nav_pieza))){
-                    
-                    JOptionPane.showMessageDialog(this, "Pieza ( " + arr_piezas.get(nav_pieza).getNombre() + " )  eliminado correcamente.");
-                    
-                    arr_piezas.remove(nav_pieza);   
-                    
-                    if(arr_piezas.size() > 0){
-                        
-                        if((nav_pieza - 1)>=0){
+                try {
 
-                            pintarPiezaListado(arr_piezas.get(nav_pieza- 1));
+                    if(Hibernate_AD.deletePieza(arr_piezas.get(nav_pieza))){
 
-                            Integer min = nav_pieza;
+                        JOptionPane.showMessageDialog(this, "Pieza ( " + arr_piezas.get(nav_pieza).getNombre() + " )  eliminado correcamente.");
 
-                            jT_pieza_min.setText( min.toString() );
+                        arr_piezas.remove(nav_pieza);   
 
-                            nav_pieza = nav_pieza - 1;
+                        if(arr_piezas.size() > 0){
+
+                            if((nav_pieza - 1)>=0){
+
+                                pintarPiezaListado(arr_piezas.get(nav_pieza- 1));
+
+                                Integer min = nav_pieza;
+
+                                jT_pieza_min.setText( min.toString() );
+
+                                nav_pieza = nav_pieza - 1;
+
+                            }else{
+
+                                pintarPiezaListado(arr_piezas.get((arr_piezas.size() - 1)));
+
+                                Integer min = arr_piezas.size();
+
+                                jT_pieza_min.setText( min.toString() );
+
+                                nav_pieza = arr_piezas.size() - 1;
+
+                            }    
+
+                            Integer max = arr_piezas.size();
+
+                            jT_pieza_max.setText( max.toString() );
 
                         }else{
 
-                            pintarPiezaListado(arr_piezas.get((arr_piezas.size() - 1)));
+                            jT_pieza_min.setText( "0" );
 
-                            Integer min = arr_piezas.size();
+                            jT_pieza_max.setText( "000" );
 
-                            jT_pieza_min.setText( min.toString() );
+                            pintarPiezaListado(new Piezas());
 
-                            nav_pieza = arr_piezas.size() - 1;
+                        }
 
-                        }    
-                        
-                        Integer max = arr_piezas.size();
-                    
-                        jT_pieza_max.setText( max.toString() );
-                        
-                    }else{
-                        
-                        jT_pieza_min.setText( "0" );
-                        
-                        jT_pieza_max.setText( "000" );
-                    
-                        pintarPiezaListado(new Piezas());
+                    }else
 
-                    }
-                    
-                }else
-                    
-                    JOptionPane.showMessageDialog(this, "Pieza ( " + arr_piezas.get(nav_pieza).getNombre() + " )  no se ha podido eliminar.");
-                
-            } catch (IllegalOrphanException ex) {
-                
-                Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
-                
-            } catch (NonexistentEntityException ex) {
-                
-                Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
-                
-            }
-                         
-        }         
+                        JOptionPane.showMessageDialog(this, "Pieza ( " + arr_piezas.get(nav_pieza).getNombre() + " )  no se ha podido eliminar.");
+
+                } catch (IllegalOrphanException ex) {
+
+                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+                } catch (NonexistentEntityException ex) {
+
+                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+
+            }    
+            
+        }
         
     }//GEN-LAST:event_jB_pieza_eliminar_02MouseClicked
 
@@ -2903,29 +3079,33 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     private void jB_proyecto_eliminar_01MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_proyecto_eliminar_01MouseClicked
         // TODO add your handling code here:
         
-        if(mod_proyecto != null){     
+        if(jB_proyecto_eliminar_01.isEnabled()){
             
-           try {
-               if(Hibernate_AD.deleteProyecto(mod_proyecto)){
-                   
-                   JOptionPane.showMessageDialog(this, "Proyecto ( " + arr_proyectos.get(nav_proyecto).getNombre() + " )  eliminado correcamente.");
-                   
-                   limpiarProyecto();
-                   
-               }else
-                   
-                   JOptionPane.showMessageDialog(this, "proyecto ( " + arr_proyectos.get(nav_proyecto).getNombre() + " )  no se ha podido eliminar.");
-               
-           } catch (IllegalOrphanException ex) {
-               
-               Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
-               
-           } catch (NonexistentEntityException ex) {
-               
-               Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
-               
-           }
-                            
+            if(mod_proyecto != null){     
+            
+                try {
+                    if(Hibernate_AD.deleteProyecto(mod_proyecto)){
+
+                        JOptionPane.showMessageDialog(this, "Proyecto ( " + arr_proyectos.get(nav_proyecto).getNombre() + " )  eliminado correcamente.");
+
+                        limpiarProyecto();
+
+                    }else
+
+                        JOptionPane.showMessageDialog(this, "proyecto ( " + arr_proyectos.get(nav_proyecto).getNombre() + " )  no se ha podido eliminar.");
+
+                } catch (IllegalOrphanException ex) {
+
+                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+                } catch (NonexistentEntityException ex) {
+
+                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+
+            }
+            
         }
         
     }//GEN-LAST:event_jB_proyecto_eliminar_01MouseClicked
@@ -2933,54 +3113,62 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     private void jB_proyecto_modificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_proyecto_modificarMouseClicked
         // TODO add your handling code here:
         
-         if(mod_proyecto != null){            
-           
-            Proyectos p = rellenarProyecto(mod_proyecto.getCodigo());
+        if(jB_proyecto_modificar.isEnabled()){
             
-            if(p != null){
-                
-                try {
-                    
-                    if(Hibernate_AD.updateProyecto(p)){
-                        
-                        JOptionPane.showMessageDialog(null, "Datos del proyecto (" + p.getCodigo()+ ") modificados correctamente");
-                        
-                        limpiarProveedor();
-                        
-                    }else
-                        
-                        JOptionPane.showMessageDialog(null, "Los datos del proyecto (" + p.getCodigo()+ ") no se pudieron modifcar");
-                    
-                } catch (Exception ex) {
-                    
-                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
-                    
+            if(mod_proyecto != null){            
+           
+                Proyectos p = rellenarProyecto(mod_proyecto.getCodigo());
+
+                if(p != null){
+
+                    try {
+
+                        if(Hibernate_AD.updateProyecto(p)){
+
+                            JOptionPane.showMessageDialog(null, "Datos del proyecto (" + p.getCodigo()+ ") modificados correctamente");
+
+                            limpiarProveedor();
+
+                        }else
+
+                            JOptionPane.showMessageDialog(null, "Los datos del proyecto (" + p.getCodigo()+ ") no se pudieron modifcar");
+
+                    } catch (Exception ex) {
+
+                        Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+                    }
+
                 }
-                
+
             }
-                            
+            
         }
         
     }//GEN-LAST:event_jB_proyecto_modificarMouseClicked
 
     private void jB_proyecto_insertarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_proyecto_insertarMouseClicked
         // TODO add your handling code here:
-         try{  
+         try{
+             
+            if(jB_proyecto_insertar.isEnabled()){
+                 
+                Proyectos p = rellenarProyecto(null); 
             
-            Proyectos p = rellenarProyecto(null); 
-            
-            if(p != null){
-                
-                if(Hibernate_AD.insertProyecto(p)){
+                if(p != null){
 
-                    JOptionPane.showMessageDialog(null, "Datos de proyectos agregados correctamente");            
+                    if(Hibernate_AD.insertProyecto(p)){
 
-                    limpiarProyecto();
+                        JOptionPane.showMessageDialog(null, "Datos de proyectos agregados correctamente");            
 
-                }else
+                        limpiarProyecto();
 
-                    JOptionPane.showMessageDialog(null, "No se ha podido grabar el nuevo Proyecto");    
-                
+                    }else
+
+                        JOptionPane.showMessageDialog(null, "No se ha podido grabar el nuevo Proyecto");    
+
+                }    
+                 
             }
             
         }
@@ -2991,69 +3179,75 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
 
     private void jB_proyecto_eliminar_02MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_proyecto_eliminar_02MouseClicked
         // TODO add your handling code here:
-         if(arr_proyectos != null && arr_proyectos.size() > 0){
+        
+        if(jB_proyecto_eliminar_02.isEnabled()){
             
-            try {
-                
-                if(Hibernate_AD.deleteProyecto(arr_proyectos.get(nav_proyecto))){
-                    
-                    JOptionPane.showMessageDialog(this, "Pieza ( " + arr_proyectos.get(nav_proyecto).getNombre() + " )  eliminado correcamente.");
-                    
-                    arr_proyectos.remove(nav_proyecto);   
-                    
-                    if(arr_proyectos.size() > 0){
-                        
-                        if((nav_proyecto - 1)>=0){
+            if(arr_proyectos != null && arr_proyectos.size() > 0){
 
-                            pintarProyectoListado(arr_proyectos.get(nav_proyecto- 1));
+               try {
 
-                            Integer min = nav_proyecto;
+                   if(Hibernate_AD.deleteProyecto(arr_proyectos.get(nav_proyecto))){
 
-                            jT_proyecto_min.setText( min.toString() );
+                       JOptionPane.showMessageDialog(this, "Pieza ( " + arr_proyectos.get(nav_proyecto).getNombre() + " )  eliminado correcamente.");
 
-                            nav_proyecto = nav_proyecto - 1;
+                       arr_proyectos.remove(nav_proyecto);   
 
-                        }else{
+                       if(arr_proyectos.size() > 0){
 
-                            pintarProyectoListado(arr_proyectos.get((arr_proyectos.size() - 1)));
+                           if((nav_proyecto - 1)>=0){
 
-                            Integer min = arr_proyectos.size();
+                               pintarProyectoListado(arr_proyectos.get(nav_proyecto- 1));
 
-                            jT_proyecto_min.setText( min.toString() );
+                               Integer min = nav_proyecto;
 
-                            nav_proyecto = arr_proyectos.size() - 1;
+                               jT_proyecto_min.setText( min.toString() );
 
-                        }    
-                        
-                        Integer max = arr_proyectos.size();
-                    
-                        jT_proyecto_max.setText( max.toString() );
-                        
-                    }else{
-                        
-                        jT_proyecto_min.setText( "0" );
-                        
-                        jT_proyecto_max.setText( "000" );
-                    
-                        pintarProyectoListado(new Proyectos());
+                               nav_proyecto = nav_proyecto - 1;
 
-                    }
-                    
-                }else
-                    
-                    JOptionPane.showMessageDialog(this, "Pieza ( " + arr_proyectos.get(nav_proyecto).getNombre() + " )  no se ha podido eliminar.");
-                
-            } catch (IllegalOrphanException ex) {
-                
-                Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
-                
-            } catch (NonexistentEntityException ex) {
-                
-                Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
-                
-            }
-                         
-        }         
+                           }else{
+
+                               pintarProyectoListado(arr_proyectos.get((arr_proyectos.size() - 1)));
+
+                               Integer min = arr_proyectos.size();
+
+                               jT_proyecto_min.setText( min.toString() );
+
+                               nav_proyecto = arr_proyectos.size() - 1;
+
+                           }    
+
+                           Integer max = arr_proyectos.size();
+
+                           jT_proyecto_max.setText( max.toString() );
+
+                       }else{
+
+                           jT_proyecto_min.setText( "0" );
+
+                           jT_proyecto_max.setText( "000" );
+
+                           pintarProyectoListado(new Proyectos());
+
+                       }
+
+                   }else
+
+                       JOptionPane.showMessageDialog(this, "Pieza ( " + arr_proyectos.get(nav_proyecto).getNombre() + " )  no se ha podido eliminar.");
+
+               } catch (IllegalOrphanException ex) {
+
+                   Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+               } catch (NonexistentEntityException ex) {
+
+                   Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+               }
+
+           }    
+            
+        }        
+                 
     }//GEN-LAST:event_jB_proyecto_eliminar_02MouseClicked
 
     private void jB_proyecto_antMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_proyecto_antMouseClicked
@@ -3318,7 +3512,7 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
          
     }//GEN-LAST:event_jB_proyecto_filtro_ejecutarMouseClicked
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void jB_gG_recargaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_gG_recargaMouseClicked
         // TODO add your handling code here:
         this.arr_proveedores  = Hibernate_AD.findAllProveedores();
         this.arr_piezas  = Hibernate_AD.findAllPiezas();
@@ -3360,8 +3554,8 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
             }           
             
         } 
-    }//GEN-LAST:event_jButton1MouseClicked
-
+    }//GEN-LAST:event_jB_gG_recargaMouseClicked
+   
     private void jCombo_gG_cod_provItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCombo_gG_cod_provItemStateChanged
         // TODO add your handling code here:
         if(jCombo_gG_cod_prov.getItemCount() > 0 && jCombo_gG_cod_prov.getSelectedIndex() != 0){
@@ -3378,7 +3572,12 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
                 
             }
             
-        }
+        }else
+            
+            jT_gG_proveedor.setText("");
+        
+        exiteGestion();
+        
     }//GEN-LAST:event_jCombo_gG_cod_provItemStateChanged
 
     private void jCombo_gG_cod_piezaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCombo_gG_cod_piezaItemStateChanged
@@ -3397,7 +3596,12 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
                 
             }
             
-        }
+        }else
+             
+            jT_gG_pieza.setText("");
+         
+         exiteGestion();
+         
     }//GEN-LAST:event_jCombo_gG_cod_piezaItemStateChanged
 
     private void jCombo_gG_cod_proyectoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCombo_gG_cod_proyectoItemStateChanged
@@ -3417,7 +3621,11 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
                 
             }
             
-        }
+        }else            
+
+            jT_gG_proyecto.setText("");
+        
+        exiteGestion();
         
     }//GEN-LAST:event_jCombo_gG_cod_proyectoItemStateChanged
 
@@ -3425,26 +3633,32 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
         // TODO add your handling code here:
         
          try{  
+             
+            if(jB_gG_insertar1.isEnabled()){
             
-            Gestion g = rellenarGestion(null); 
+                Gestion g = rellenarGestion(null); 
             
-            if(g != null){
+                if(g != null){
                 
-                if(Hibernate_AD.insertGestion(g)){
+                    if(Hibernate_AD.insertGestion(g)){
 
-                    JOptionPane.showMessageDialog(null, "Datos de gestion global agregados correctamente");            
+                        JOptionPane.showMessageDialog(null, "Datos de gestion global agregados correctamente");            
 
-                    //limpiarProyecto();
+                        limpiarGestion();
 
-                }else
+                    }else
 
-                    JOptionPane.showMessageDialog(null, "No se ha podido grabar la nueva gestion global");    
-                
+                        JOptionPane.showMessageDialog(null, "No se ha podido grabar la nueva gestion global");    
+
+                }
+            
             }
             
         }
         catch(Exception ex){
+            
             Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
         
     }//GEN-LAST:event_jB_gG_insertar1MouseClicked
@@ -3467,10 +3681,7 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
                 
                 JOptionPane.showMessageDialog(null, "No se encuentran gestiones");    
                 
-            }   
-            
-             JOptionPane.showMessageDialog(null, "hace click");   
-            
+            }               
             
         }catch(Exception ex){
             
@@ -3478,6 +3689,86 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
             
         }        
     }//GEN-LAST:event_jB_proyecto_gG_ejecutar1MouseClicked
+
+    private void jB_gG_limpiar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_gG_limpiar1MouseClicked
+        // TODO add your handling code here:
+        limpiarGestion();
+    }//GEN-LAST:event_jB_gG_limpiar1MouseClicked
+
+    private void jB_gG_modificar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_gG_modificar1MouseClicked
+        // TODO add your handling code here:
+        
+        if(jB_gG_modificar1.isEnabled()){
+            
+            if(mod_gestion != null){            
+
+                Gestion g = rellenarGestion(mod_gestion.getGestionPK());
+
+                if(g != null){
+
+                    try {
+
+                        if(Hibernate_AD.updateGestion(g)){
+
+                            JOptionPane.showMessageDialog(null, "Datos de gestion (" + g.getGestionPK().getCodproveedor() + " - " 
+                            + g.getGestionPK().getCodpieza() + " - " + g.getGestionPK().getCodproyecto() + ") modificados correctamente");
+
+                            limpiarGestion();
+
+                        }else
+
+                            JOptionPane.showMessageDialog(null, "Los datos del gestion (" + g.getGestionPK().getCodproveedor() + " - " 
+                            + g.getGestionPK().getCodpieza() + " - " + g.getGestionPK().getCodproyecto() + ") no se pudieron modifcar");
+
+                    } catch (Exception ex) {
+
+                        Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+                    }
+
+                }
+
+            }
+            
+        }
+        
+    }//GEN-LAST:event_jB_gG_modificar1MouseClicked
+
+    private void jB_gG_eliminar_2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_gG_eliminar_2MouseClicked
+        // TODO add your handling code here:
+        
+        if(jB_gG_eliminar_2.isEnabled()){
+            
+            if(mod_gestion != null){     
+            
+                try {
+                    if(Hibernate_AD.deleteGestion(mod_gestion)){
+
+                        JOptionPane.showMessageDialog(this, "Gestion (" + mod_gestion.getGestionPK().getCodproveedor() + " - " 
+                            + mod_gestion.getGestionPK().getCodpieza() + " - " + mod_gestion.getGestionPK().getCodproyecto() + ")  eliminado correcamente.");
+
+                        limpiarGestion();
+
+                    }else
+
+                        JOptionPane.showMessageDialog(this, "Gestion (" + mod_gestion.getGestionPK().getCodproveedor() + " - " 
+                            + mod_gestion.getGestionPK().getCodpieza() + " - " + mod_gestion.getGestionPK().getCodproyecto() + ")  no se ha podido eliminar.");
+
+                } catch (IllegalOrphanException ex) {
+
+                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+                } catch (NonexistentEntityException ex) {
+
+                    Logger.getLogger(VistaGestionProyectos.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+
+             }
+            
+        }
+        
+    }//GEN-LAST:event_jB_gG_eliminar_2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -3521,6 +3812,7 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     private javax.swing.JButton jB_gG_insertar1;
     private javax.swing.JButton jB_gG_limpiar1;
     private javax.swing.JButton jB_gG_modificar1;
+    private javax.swing.JButton jB_gG_recarga;
     private javax.swing.JButton jB_pieza_ant;
     private javax.swing.JButton jB_pieza_eject_consulta;
     private javax.swing.JButton jB_pieza_eliminar_01;
@@ -3555,8 +3847,6 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     private javax.swing.JButton jB_proyecto_limpiar;
     private javax.swing.JButton jB_proyecto_modificar;
     private javax.swing.JButton jB_proyecto_sigui;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox_gG_filtro1;
     private javax.swing.JComboBox jComboBox_pieza_filtro;
     private javax.swing.JComboBox jComboBox_prov_filtro;
     private javax.swing.JComboBox jComboBox_proyecto_filtro;
@@ -3598,12 +3888,14 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel25;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
@@ -3611,7 +3903,6 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTextField jT_gG_cantidad;
-    private javax.swing.JTextField jT_gG_filtro1;
     private java.awt.Label jT_gG_pieza;
     private java.awt.Label jT_gG_proveedor;
     private java.awt.Label jT_gG_proyecto;
@@ -3669,6 +3960,7 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     private javax.swing.JTable jTable_pieza;
     private javax.swing.JTable jTable_prov;
     private javax.swing.JTable jTable_proyecto;
+    private javax.swing.JTextArea jTextArea1;
     private java.awt.Label label1;
     private java.awt.Label label2;
     private java.awt.Label label26;
@@ -3692,7 +3984,6 @@ public class VistaGestionProyectos extends javax.swing.JFrame {
     private java.awt.Label label42;
     private java.awt.Label label43;
     private java.awt.Label label44;
-    private java.awt.Label label45;
     private java.awt.Label label5;
     private java.awt.Label label6;
     private java.awt.Label label7;

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.swing.JOptionPane;
 import modelo.Piezas;
 import modelo.Piezas;
 
@@ -149,6 +150,9 @@ public class PiezasJpaController implements Serializable {
                 illegalOrphanMessages.add("This Piezas (" + piezas + ") cannot be destroyed since the Gestion " + gestionListOrphanCheckGestion + " in its gestionList field has a non-nullable piezas field.");
             }
             if (illegalOrphanMessages != null) {
+                
+                JOptionPane.showMessageDialog(null, "No se puede eliminar la pieza porque todavía hay gestiones relacionadas con la misma");
+                
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(piezas);

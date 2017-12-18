@@ -15,6 +15,7 @@ import controlador.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Gestion;
+import modelo.GestionPK;
 import modelo.Piezas;
 import modelo.Proveedores;
 import modelo.Proyectos;
@@ -183,6 +184,40 @@ public class Hibernate_AD {
          
     }
     
+    public static List<Gestion> findGestionByFiltro(int select,  GestionPK gestionPK){
+    
+         if(gestionPK == null){
+             
+            return findAllGestiones();
+            
+        }else{
+             
+            GestionJpaController c_gestion = new GestionJpaController();        
+            
+            switch(select){
+                
+                case 0:
+                    
+                      return c_gestion.findByGestionPK(gestionPK);
+                    
+                case 1:
+                    
+                     // return c_gestion.findByNombreLike(filtro);  
+                
+                case 2:
+                    
+                    //  return c_gestion.findByCiudadLike(filtro);   
+                    
+                default:
+                    
+                    return null;
+                    
+            }
+            
+        }
+         
+    }
+    
     public static boolean insertOrUpdateProveedor(Proveedores p){
             
         ProveedoresJpaController c_prov = new ProveedoresJpaController();
@@ -203,6 +238,26 @@ public class Hibernate_AD {
         
     }
     
+    public static boolean insertProyecto(Proyectos p) throws Exception{
+            
+        ProyectosJpaController c_proyectos = new ProyectosJpaController();
+        
+        c_proyectos.create(p);
+        
+        return true;
+        
+    }
+     
+    public static boolean insertGestion(Gestion g) throws Exception{
+         
+        GestionJpaController c_gestion = new GestionJpaController();
+         
+        c_gestion.create(g);
+        
+        return true;
+         
+     }
+    
     public static boolean updatePieza(Piezas p) throws Exception{
             
         PiezasJpaController c_piezas = new PiezasJpaController();
@@ -213,17 +268,7 @@ public class Hibernate_AD {
         
     }
     
-    public static boolean insertProyecto(Proyectos p) throws Exception{
-            
-        ProyectosJpaController c_proyectos = new ProyectosJpaController();
-        
-        c_proyectos.create(p);
-        
-        return true;
-        
-    }
-    
-     public static boolean updateProyecto(Proyectos p) throws Exception{
+    public static boolean updateProyecto(Proyectos p) throws Exception{
             
         ProyectosJpaController c_proyectos = new ProyectosJpaController();
         
@@ -231,23 +276,23 @@ public class Hibernate_AD {
         
         return true;
         
-    }
-     
-     public static boolean insertGestion(Gestion g) throws Exception{
-         
+    }   
+    
+    public static boolean updateGestion(Gestion g) throws Exception{
+            
         GestionJpaController c_gestion = new GestionJpaController();
-         
-        c_gestion.create(g);
+        
+        c_gestion.edit(g);
         
         return true;
-         
-     }
+        
+    }   
     
-    public static boolean deleteProveedor(Proveedores p){
+    public static boolean deleteProveedor(Proveedores p) throws NonexistentEntityException, IllegalOrphanException{
             
         ProveedoresJpaController c_prov = new ProveedoresJpaController();
         
-        c_prov.delete(p);
+        c_prov.delete(p.getCodigo());
         
         return true;
         
@@ -268,6 +313,16 @@ public class Hibernate_AD {
         ProyectosJpaController c_proyectos = new ProyectosJpaController();
         
         c_proyectos.destroy(p.getCodigo());
+        
+        return true;
+        
+    }
+    
+    public static boolean deleteGestion(Gestion g) throws IllegalOrphanException, NonexistentEntityException{
+            
+        GestionJpaController c_gestion = new GestionJpaController();        
+        
+        c_gestion.destroy(g);
         
         return true;
         
